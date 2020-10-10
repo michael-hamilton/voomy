@@ -1,0 +1,29 @@
+.container {
+  padding: 10px;
+}
+
+.list {
+  border: 1px solid #373737;
+  min-width: 300px;
+
+  .list-header {
+    background-color: #373737;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+
+    h2 {
+      color: white;
+    }
+  }
+
+  .list-body {
+    padding: 10px;
+  }
+}
+
+.videolist {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}

@@ -1,0 +1,33 @@
+.container {
+  padding: 10px;
+}
+
+.list {
+  border: 1px solid #373737;
+  width: 200px;
+
+  .list-header {
+    background-color: #373737;
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+
+    h2 {
+      color: white;
+    }
+  }
+
+  .list-body {
+    padding: 10px;
+  }
+}
+
+.videopath-form-wrapper {
+  margin: 10px;
+}
+
+.drivelist {
+  display: flex;
+  flex-direction: column;
+  list-style: none;
+}
