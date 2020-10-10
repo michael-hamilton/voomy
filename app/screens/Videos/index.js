@@ -3,12 +3,12 @@ import axios from 'axios';
 import ReactPlayer from 'react-player';
 import './styles.scss';
 
-const renderVideoList = (videos, selectedID, handleClick) => {
+const renderVideoList = (videos, selectedID, searchTerm, handleClick) => {
   if (videos.length) {
     return (
       <ul className={'videolist'}>
         {
-          videos.map((video, index) => (
+          videos.filter(video => video.toString().includes(searchTerm)).map((video, index) => (
             <li key={index} className={`list-item ${selectedID == index ? 'active' : ''}`}>
               <a data-index={index} href={`/${video}`} onClick={handleClick}>
                 {decodeURI(video)}
@@ -34,9 +34,10 @@ class Videos extends Component {
 
     this.state = {
       isVideoListLoading: false,
+      searchTerm: '',
       selectedVideoID: null,
       selectedVideoURL: '#',
-      videos: [1,2,3,4,5,6,7]
+      videos: []
     };
   }
 
@@ -50,6 +51,10 @@ class Videos extends Component {
     const response = await axios.get(`/videolist`);
 
     this.setState({videos: response.data, isVideoListLoading: false});
+  }
+
+  handleSearch(e) {
+    this.setState({searchTerm: e.target.value});
   }
 
   playVideo(e) {
@@ -68,14 +73,20 @@ class Videos extends Component {
             <h2>videos</h2>
             <button onClick={() => this.getVideoList()}>refresh</button>
           </div>
+
+          <div className={'search-wrapper'}>
+            <input type={'text'} placeholder={'search...'} onChange={(e) => this.handleSearch(e)} />
+          </div>
+
           <div className={'list-body'}>
             {
               this.state.isVideoListLoading ?
                 <div className={'message-wrapper'}><p>loading...</p></div> :
-                renderVideoList(this.state.videos, this.state.selectedVideoID, this.playVideo.bind(this))
+                renderVideoList(this.state.videos, this.state.selectedVideoID, this.state.searchTerm, this.playVideo.bind(this))
             }
           </div>
         </div>
+
         <div className={'videoplayer-wrapper'}>
           <ReactPlayer url={this.state.selectedVideoURL} controls height={'100%'} width={'100%'} />
         </div>
