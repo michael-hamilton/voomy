@@ -1,29 +1,107 @@
-.container {
+.videos-container {
+  display: flex;
+  flex-direction: row;
   padding: 10px;
-}
 
-.list {
-  border: 1px solid #373737;
-  min-width: 300px;
+  .list {
+    background-color: #efefef;
+    border: 1px solid #373737;
+    margin: 10px;
+    min-height: 500px;
+    min-width: 300px;
+    overflow: hidden;
 
-  .list-header {
-    background-color: #373737;
-    display: flex;
-    justify-content: space-around;
-    padding: 10px;
+    .list-header {
+      align-items: center;
+      background-color: #373737;
+      display: flex;
+      padding: 10px;
 
-    h2 {
-      color: white;
+      h2 {
+        color: white;
+      }
+
+      button {
+        padding: 10px;
+        position: absolute;
+        right: 10px;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+
+    .list-body {
+      height: 100%;
+      position: absolute;
+      width: 100%;
     }
   }
 
-  .list-body {
-    padding: 10px;
+  .videolist {
+    height: 100%;
+    list-style: none;
+    overflow: scroll;
+    padding-bottom: 48px;
+    position: absolute;
+    width: 100%;
+
+    .list-item {
+      a {
+        color: #373737;
+        display: block;
+        height: 100%;
+        padding: 15px;
+        transition: 0.125s;
+        width: 100%;
+
+        &:hover {
+          background-color: #373737;
+          color: white;
+        }
+      }
+
+      &:nth-child(2n) {
+        background-color: #999999;
+
+        a {
+          color: white;
+        }
+
+        &.active {
+          a {
+            color: #373737;
+          }
+        }
+      }
+
+      &.active {
+        background-color: lightgoldenrodyellow;
+
+        &:hover {
+          a {
+            color: white;
+          }
+        }
+      }
+    }
   }
+
+  .videoplayer-wrapper {
+    align-items: center;
+    display: flex;
+    flex: 1;
+    justify-content: center;
+    margin: 10px;
+  }
+
 }
 
-.videolist {
-  display: flex;
-  flex-direction: column;
-  list-style: none;
+@media(max-width: 900px) {
+  .videos-container {
+    display: flex;
+    flex-direction: column-reverse;
+    padding: 10px;
+  }
 }

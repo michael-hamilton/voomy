@@ -27,6 +27,7 @@ const app = express();
   app.use(dyn);
 
   app.get('/', async (req, res, next) => {
+    console.log('load')
     res.sendFile(`${__dirname}/dist/index.html`);
   });
 

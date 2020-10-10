@@ -11,21 +11,23 @@ import './styles.scss';
 
 const App = props => (
   <Router>
-    <div className={'header'}>
-      <h1>vidserve</h1>
-      <div className={'nav'}>
-        <NavLink exact to={'/'}>Videos</NavLink>
-        <NavLink exact to={'/config'}>Config</NavLink>
+    <div className={'app-container'}>
+      <div className={'header'}>
+        <h1>vidserve</h1>
+        <div className={'nav'}>
+          <NavLink exact to={'/'}>videos</NavLink>
+          <NavLink exact to={'/config'}>config</NavLink>
+        </div>
       </div>
+      <Switch>
+        <Route path={'/config'}>
+          <Config />
+        </Route>
+        <Route path={'/'}>
+          <Videos />
+        </Route>
+      </Switch>
     </div>
-    <Switch>
-      <Route path={'/config'}>
-        <Config />
-      </Route>
-      <Route path={'/'}>
-        <Videos />
-      </Route>
-    </Switch>
   </Router>
 );
 

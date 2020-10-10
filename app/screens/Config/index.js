@@ -48,18 +48,17 @@ class Config extends Component {
   async updateVideoPath(e) {
     e.preventDefault();
     const response = await axios.post('/videopath', {videoPath: this.state.videoPath});
-    console.log(response);
-    alert('Updates video path.');
+    alert('Updated video path.');
   }
 
   render() {
     return (
-      <div className={'container'}>
+      <div className={'config-container'}>
         <div className={'videopath-form-wrapper'}>
           <form className={'form'} onSubmit={(e) => this.updateVideoPath(e)}>
             <input
               onChange={(e) => this.handleVideoPathChange(e)}
-              placeholder={'video path'}
+              placeholder={'video search path'}
               type={'text'}
               value={this.state.videoPath}
             />

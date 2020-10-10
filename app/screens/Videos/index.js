@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
 import axios from 'axios';
+import ReactPlayer from 'react-player';
 import './styles.scss';
 
-const renderVideoList = videos => {
+const renderVideoList = (videos, selectedID, handleClick) => {
   return (
     <ul className={'videolist'}>
       {
         videos.map((video, index) => (
-          <li key={index}>
-            <a href={`/${video}`}>
+          <li key={index} className={`list-item ${selectedID == index ? 'active' : ''}`}>
+            <a data-index={index} href={`/${video}`} onClick={handleClick}>
               {decodeURI(video)}
             </a>
           </li>
@@ -23,8 +24,10 @@ class Videos extends Component {
     super(props);
 
     this.state = {
-      videos: [],
       isVideoListLoading: false,
+      selectedVideoID: null,
+      selectedVideoURL: '#',
+      videos: []
     };
   }
 
@@ -40,9 +43,17 @@ class Videos extends Component {
     this.setState({videos: response.data, isVideoListLoading: false});
   }
 
+  playVideo(e) {
+    e.preventDefault();
+    this.setState({
+        selectedVideoID: e.target.getAttribute('data-index'),
+        selectedVideoURL: e.target.href
+    });
+  }
+
   render() {
     return (
-      <div className={'container'}>
+      <div className={'videos-container'}>
         <div className={'list'}>
           <div className={'list-header'}>
             <h2>videos</h2>
@@ -52,9 +63,12 @@ class Videos extends Component {
             {
               this.state.isVideoListLoading ?
                 <p>loading...</p> :
-                renderVideoList(this.state.videos)
+                renderVideoList(this.state.videos, this.state.selectedVideoID, this.playVideo.bind(this))
             }
           </div>
+        </div>
+        <div className={'videoplayer-wrapper'}>
+          <ReactPlayer url={this.state.selectedVideoURL} controls height={'100%'} width={'100%'} />
         </div>
       </div>
     );

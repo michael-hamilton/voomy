@@ -1,33 +1,63 @@
-.container {
+.config-container {
   padding: 10px;
-}
 
-.list {
-  border: 1px solid #373737;
-  width: 200px;
+  .list {
+    background-color: #efefef;
+    border: 1px solid #373737;
+    width: 200px;
 
-  .list-header {
-    background-color: #373737;
-    display: flex;
-    justify-content: space-around;
-    padding: 10px;
+    .list-header {
+      align-items: center;
+      background-color: #373737;
+      display: flex;
+      padding: 10px;
 
-    h2 {
-      color: white;
+      h2 {
+        color: white;
+      }
+
+      button {
+        padding: 10px;
+        position: absolute;
+        right: 10px;
+
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+
+    .list-body {
+      padding: 10px;
     }
   }
 
-  .list-body {
-    padding: 10px;
+  .videopath-form-wrapper {
+    margin-bottom: 10px;
+    width: 100%;
+
+    form {
+      display: flex;
+      width: 100%;
+    }
+
+    input {
+      flex: 2;
+      padding: 10px;
+    }
+
+    button {
+      padding: 10px;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
   }
-}
 
-.videopath-form-wrapper {
-  margin: 10px;
-}
-
-.drivelist {
-  display: flex;
-  flex-direction: column;
-  list-style: none;
+  .drivelist {
+    display: flex;
+    flex-direction: column;
+    list-style: none;
+  }
 }

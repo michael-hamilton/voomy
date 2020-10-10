@@ -1,26 +1,37 @@
-.header {
-  align-items: center;
-  background-color: #373737;
-  display: flex;
-  padding: 10px;
+.app-container {
+  background-color: #999999;
+  height: 100%;
+  overflow: hidden;
 
-  h1 {
-    color: white;
-  }
+  .header {
+    align-items: center;
+    background-color: #1f80ee;
+    display: flex;
+    padding: 10px;
 
-  .nav {
-    position: absolute;
-    right: 10px;
-
-    a {
+    h1 {
       color: white;
-      margin: 10px;
-      padding: 10px;
-      text-decoration: none;
+    }
 
-      &.active {
-        background-color: white;
-        color: #373737;
+    .nav {
+      position: absolute;
+      right: 10px;
+
+      a {
+        color: white;
+        margin: 10px;
+        padding: 10px;
+        text-decoration: none;
+        transition: 0.125s;
+
+        &.active {
+          background-color: white;
+          color: #373737;
+        }
+
+        &:hover:not(.active) {
+          background-color: #999999;
+        }
       }
     }
   }
