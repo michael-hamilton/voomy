@@ -4,19 +4,28 @@ import ReactPlayer from 'react-player';
 import './styles.scss';
 
 const renderVideoList = (videos, selectedID, handleClick) => {
-  return (
-    <ul className={'videolist'}>
-      {
-        videos.map((video, index) => (
-          <li key={index} className={`list-item ${selectedID == index ? 'active' : ''}`}>
-            <a data-index={index} href={`/${video}`} onClick={handleClick}>
-              {decodeURI(video)}
-            </a>
-          </li>
-        ))
-      }
-    </ul>
-  )
+  if (videos.length) {
+    return (
+      <ul className={'videolist'}>
+        {
+          videos.map((video, index) => (
+            <li key={index} className={`list-item ${selectedID == index ? 'active' : ''}`}>
+              <a data-index={index} href={`/${video}`} onClick={handleClick}>
+                {decodeURI(video)}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    )
+  }
+  else {
+    return (
+      <div className={'message-wrapper'}>
+        <p>no videos</p>
+      </div>
+    );
+  }
 };
 
 class Videos extends Component {
@@ -27,7 +36,7 @@ class Videos extends Component {
       isVideoListLoading: false,
       selectedVideoID: null,
       selectedVideoURL: '#',
-      videos: []
+      videos: [1,2,3,4,5,6,7]
     };
   }
 
@@ -62,7 +71,7 @@ class Videos extends Component {
           <div className={'list-body'}>
             {
               this.state.isVideoListLoading ?
-                <p>loading...</p> :
+                <div className={'message-wrapper'}><p>loading...</p></div> :
                 renderVideoList(this.state.videos, this.state.selectedVideoID, this.playVideo.bind(this))
             }
           </div>

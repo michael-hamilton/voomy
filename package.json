@@ -20,7 +20,7 @@
   },
   "scripts": {
     "build": "parcel build app/index.html",
-    "dev": "yarn watch && yarn start",
+    "dev": "yarn watch & node index.js",
     "start": "pm2 start index.js",
     "watch": "parcel watch app/index.html"
   },
