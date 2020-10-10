@@ -1,0 +1,27 @@
+.header {
+  align-items: center;
+  background-color: #373737;
+  display: flex;
+  padding: 10px;
+
+  h1 {
+    color: white;
+  }
+
+  .nav {
+    position: absolute;
+    right: 10px;
+
+    a {
+      color: white;
+      margin: 10px;
+      padding: 10px;
+      text-decoration: none;
+
+      &.active {
+        background-color: white;
+        color: #373737;
+      }
+    }
+  }
+}

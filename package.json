@@ -1,0 +1,21 @@
+{
+  "name": "vidserve",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/michael-hamilton/vidserve.git",
+  "author": "Michael Hamilton <michaelhamilton626@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "drivelist": "^9.1.0",
+    "express": "^4.17.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "devDependencies": {
+    "sass": "^1.27.0"
+  }
+}
