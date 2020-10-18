@@ -51,6 +51,9 @@
     }
 
     .search-wrapper {
+      position: absolute;
+      right: 10px;
+
       input {
         background-color: #555555;
         border: none;

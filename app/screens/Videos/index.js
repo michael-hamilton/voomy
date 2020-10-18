@@ -41,16 +41,25 @@ class Videos extends Component {
     super(props);
 
     this.state = {
+      hasVideoListLoaded: false,
       isVideoListLoading: false,
       searchTerm: '',
       selectedVideoID: null,
       selectedVideoURL: '#',
       videos: []
     };
+
+    this.pollInterval;
   }
 
   componentDidMount() {
     this.getVideoList();
+
+    this.pollInterval = setInterval(() => this.getVideoList(), 5000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.pollInterval);
   }
 
   async getVideoList() {
@@ -58,7 +67,11 @@ class Videos extends Component {
 
     const response = await axios.get(`/videolist`);
 
-    this.setState({videos: response.data, isVideoListLoading: false});
+    this.setState({
+      hasVideoListLoaded: true,
+      isVideoListLoading: false,
+      videos: response.data
+    });
   }
 
   handleSearch(e) {
@@ -81,16 +94,14 @@ class Videos extends Component {
             <h2>
             	videos&nbsp;<small>({this.state.videos.length})</small>
             </h2>
-            <button onClick={() => this.getVideoList()}>refresh</button>
-          </div>
-
-          <div className={'search-wrapper'}>
-            <input type={'text'} placeholder={'search...'} onChange={(e) => this.handleSearch(e)} />
+            <div className={'search-wrapper'}>
+              <input type={'text'} placeholder={'search...'} onChange={(e) => this.handleSearch(e)} />
+            </div>
           </div>
 
           <div className={'list-body'}>
             {
-              this.state.isVideoListLoading ?
+              (this.state.isVideoListLoading && !this.state.hasVideoListLoaded) ?
                 <div className={'message-wrapper'}><p>loading...</p></div> :
                 renderVideoList(this.state.videos, this.state.selectedVideoID, this.state.searchTerm, this.playVideo.bind(this))
             }
