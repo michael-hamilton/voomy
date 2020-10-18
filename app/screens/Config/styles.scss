@@ -1,5 +1,5 @@
 .config-container {
-  padding: 10px;
+  padding: 0 0 0 40px;
 
   .list {
     background-color: #efefef;
@@ -126,3 +126,10 @@
     }
   }
 }
+
+@media(max-width: 500px) {
+  .config-container {
+    padding: 0;
+  }
+}
+
