@@ -2,10 +2,16 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import './styles.scss';
 
-const renderDriveList = drives => {
+const renderDriveList = (drives, clickHandle) => {
   return (
     <ul className={'drivelist'}>
-      {drives.map((drive, index) => <li key={index}>{drive.device} {drive.mountpoints[0].path}</li>)}
+      {drives.map((drive, index) =>
+        <li key={index} className={'list-item'}>
+          <button data-drive={drive.device} onClick={clickHandle}>
+            {drive.device} {drive.mountpoints[0].path}
+          </button>
+        </li>
+      )}
     </ul>
   )
 };
@@ -38,6 +44,13 @@ class Config extends Component {
     this.setState({videoPath: e.target.value});
   }
 
+  handleDriveSelect(e) {
+    if (confirm('Change drive?')) {
+      this.setState({
+        videoPath: e.target.getAttribute('data-drive')
+      }, () => this.updateVideoPath());
+    }
+  }
 
   async getVideoPath() {
     const response = await axios.get('/videopath');
@@ -47,7 +60,7 @@ class Config extends Component {
 
   async updateVideoPath(e) {
     e.preventDefault();
-    const response = await axios.post('/videopath', {videoPath: this.state.videoPath});
+    await axios.post('/videopath', {videoPath: this.state.videoPath});
     alert('Updated video path.');
   }
 
@@ -74,7 +87,7 @@ class Config extends Component {
             {
               this.state.isDriveListLoading ?
                 <p>loading...</p> :
-                renderDriveList(this.state.drives)
+                renderDriveList(this.state.drives, this.handleDriveSelect.bind(this))
             }
           </div>
         </div>
