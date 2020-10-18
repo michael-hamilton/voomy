@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {
   BrowserRouter as Router,
   Switch,
-  Redirect,
   Route,
   NavLink,
 } from 'react-router-dom';
