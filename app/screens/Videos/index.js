@@ -8,8 +8,16 @@ const renderVideoList = (videos, selectedID, searchTerm, handleClick) => {
     return (
       <ul className={'videolist'}>
         {
-          videos.filter(video => video.toString().includes(searchTerm)).map((video, index) => (
-            <li key={index} className={`list-item ${selectedID == index ? 'active' : ''}`}>
+          videos.filter(video =>
+            decodeURI(video.toString())
+              .toLowerCase()
+              .indexOf(searchTerm.toLowerCase())
+            !== -1
+          ).map((video, index) => (
+            <li
+              key={index}
+              className={`list-item ${selectedID == index ? 'active' : ''}`}
+            >
               <a data-index={index} href={`/${video}`} onClick={handleClick}>
                 {decodeURI(video)}
               </a>

@@ -8,7 +8,7 @@ const renderDriveList = (drives, clickHandle) => {
       {drives.map((drive, index) =>
         <li key={index} className={'list-item'}>
           <button data-drive={drive.device} onClick={clickHandle}>
-            {drive.device} {drive.mountpoints[0].path}
+            {drive.device}
           </button>
         </li>
       )}
@@ -48,7 +48,7 @@ class Config extends Component {
     if (confirm('Change drive?')) {
       this.setState({
         videoPath: e.target.getAttribute('data-drive')
-      }, () => this.updateVideoPath());
+      }, () => this.updateVideoPath(e));
     }
   }
 
