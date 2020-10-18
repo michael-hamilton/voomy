@@ -22,14 +22,23 @@ class Config extends Component {
 
     this.state = {
       drives: [],
+      hasDriveListLoaded: false,
       isDriveListLoading: false,
       videoPath: '',
     };
+
+    this.pollInterval;
   }
 
   componentDidMount() {
     this.getDriveList();
     this.getVideoPath();
+
+    this.pollInterval = setInterval(() => this.getDriveList(), 5000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.pollInterval);
   }
 
   async getDriveList() {
@@ -37,7 +46,11 @@ class Config extends Component {
 
     const response = await axios.get('/drivelist');
 
-    this.setState({drives: response.data, isDriveListLoading: false});
+    this.setState({
+      drives: response.data,
+      hasDriveListLoaded: true,
+      isDriveListLoading: false
+    });
   }
 
   handleVideoPathChange(e) {
@@ -81,12 +94,11 @@ class Config extends Component {
         <div className={'list'}>
           <div className={'list-header'}>
             <h2>drives</h2>
-            <button onClick={() => this.getDriveList()}>refresh</button>
           </div>
           <div className={'list-body'}>
             {
-              this.state.isDriveListLoading ?
-                <p>loading...</p> :
+              (this.state.isDriveListLoading && !this.state.hasDriveListLoaded) ?
+                <div className={'message-wrapper'}><p>loading...</p></div> :
                 renderDriveList(this.state.drives, this.handleDriveSelect.bind(this))
             }
           </div>
