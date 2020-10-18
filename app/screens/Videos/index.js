@@ -78,7 +78,9 @@ class Videos extends Component {
       <div className={'videos-container'}>
         <div className={'list'}>
           <div className={'list-header'}>
-            <h2>videos</h2>
+            <h2>
+            	videos&nbsp;<small>({this.state.videos.length})</small>
+            </h2>
             <button onClick={() => this.getVideoList()}>refresh</button>
           </div>
 
