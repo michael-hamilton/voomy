@@ -3,17 +3,26 @@ import axios from 'axios';
 import './styles.scss';
 
 const renderDriveList = (drives, clickHandle) => {
-  return (
-    <ul className={'drivelist'}>
-      {drives.map((drive, index) =>
-        <li key={index} className={'list-item'}>
-          <button data-drive={drive.mountpoints[0].path} onClick={clickHandle}>
-            {drive.mountpoints[0].path}
-          </button>
-        </li>
-      )}
-    </ul>
-  )
+  if (drives.length) {
+    return (
+      <ul className={'drivelist'}>
+        {drives.map((drive, index) =>
+          <li key={index} className={'list-item'}>
+            <button data-drive={drive.mountpoints[0].path} onClick={clickHandle}>
+              {drive.mountpoints[0].path}
+            </button>
+          </li>
+        )}
+      </ul>
+    )
+  }
+  else {
+    return (
+      <div className={'message-wrapper'}>
+        <p>no drives</p>
+      </div>
+    );
+  }
 };
 
 class Config extends Component {
@@ -91,10 +100,14 @@ class Config extends Component {
             <button type={'submit'}>save</button>
           </form>
         </div>
+
         <div className={'list'}>
           <div className={'list-header'}>
-            <h2>drives</h2>
+            <h2>
+              drives&nbsp;<small>({this.state.drives.length})</small>
+            </h2>
           </div>
+
           <div className={'list-body'}>
             {
               (this.state.isDriveListLoading && !this.state.hasDriveListLoaded) ?
