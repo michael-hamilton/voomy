@@ -96,7 +96,7 @@ class Videos extends Component {
         </div>
 
         <div className={'videoplayer-wrapper'}>
-          <ReactPlayer url={this.state.selectedVideoURL} controls height={'100%'} width={'100%'} />
+          <ReactPlayer playing={true} playsinline url={this.state.selectedVideoURL} controls height={'100%'} width={'100%'} />
         </div>
       </div>
     );
