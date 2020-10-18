@@ -56,6 +56,22 @@ const app = express();
     res.send('ok');
   });
 
+  app.post('/checkpin', async (req, res, next) => {
+    USER_PIN = req.body.pin;
+    const storedPin = await storage.getItem('PIN');
+    if(!storedPin || USER_PIN === storedPin) {
+      res.send('ok');
+    }
+    else {
+      res.send('error');
+    }
+  });
+
+  app.post('/setpin', async (req, res, next) => {
+    await storage.setItem('PIN', req.body.pin);
+    res.send('ok');
+  });
+
   app.get('*', (req, res, next) => {
     res.sendFile(`${__dirname}/dist/index.html`);
   });

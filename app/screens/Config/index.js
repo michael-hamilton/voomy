@@ -34,6 +34,7 @@ class Config extends Component {
       hasDriveListLoaded: false,
       isDriveListLoading: false,
       videoPath: '',
+      pin: '',
     };
 
     this.pollInterval;
@@ -66,6 +67,10 @@ class Config extends Component {
     this.setState({videoPath: e.target.value});
   }
 
+  handlePinChange(e) {
+    this.setState({pin: e.target.value});
+  }
+
   handleDriveSelect(e) {
     if (confirm('Change drive?')) {
       this.setState({
@@ -80,6 +85,12 @@ class Config extends Component {
     }
   }
 
+  confirmSavePin(e) {
+    if (confirm('Update pin code?')) {
+      this.savePin(e);
+    }
+  }
+
   async getVideoPath() {
     const response = await axios.get('/videopath');
 
@@ -91,10 +102,33 @@ class Config extends Component {
     await axios.post('/videopath', {videoPath: this.state.videoPath});
   }
 
+  async savePin(e) {
+    e.preventDefault();
+    await axios.post('/setpin', {pin: this.state.pin});
+  }
+
   render() {
     return (
       <div className={'config-container'}>
-        <div className={'videopath-form-wrapper'}>
+        <div className={'form-wrapper'}>
+          <form
+            className={'form'}
+            onSubmit={(e) => this.confirmSavePin(e)}
+          >
+            <input
+              onChange={(e) => this.handlePinChange(e)}
+              placeholder={'pin'}
+              type={'password'}
+              inputmode={'numeric'}
+              maxlength="4"
+              pattern="[0-9]{4}"
+              value={this.state.pin}
+            />
+            <button type={'submit'}>save</button>
+          </form>
+        </div>
+
+        <div className={'form-wrapper'}>
           <form
             className={'form'}
             onSubmit={(e) => this.confirmSaveVideoPath(e)}

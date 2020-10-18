@@ -1,24 +1,24 @@
 import React, {Component} from 'react';
+import axios from "axios";
 import './styles.scss';
-
-const PIN_CODE = '1234';
 
 class Login extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      pin: null,
+      pin: '',
     };
   }
 
-  handlePasswordChange(e) {
+  handlePinChange(e) {
     this.setState({pin: e.target.value});
   }
 
   async login(e) {
     e.preventDefault();
-    if (this.state.pin === PIN_CODE) {
+    const response = await axios.post('/checkpin', {pin: this.state.pin});
+    if (response.data === 'ok') {
       this.props.login();
     }
     else {
@@ -36,7 +36,7 @@ class Login extends Component {
             onSubmit={(e) => this.login(e)}
           >
             <input
-              onChange={(e) => this.handlePasswordChange(e)}
+              onChange={(e) => this.handlePinChange(e)}
               placeholder={'pin'}
               type={'password'}
               inputmode={'numeric'}
