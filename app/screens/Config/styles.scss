@@ -17,33 +17,17 @@
       align-items: center;
       background-color: #373737;
       display: flex;
-      justify-content: center;
-      padding: 30px;
+      justify-content: space-between;
+      padding: 10px;
       z-index: 1;
 
       h2 {
         color: white;
-        left: 10px;
-        position: absolute;
 
         small {
           font-size: 14px;
           font-weight: 300;
           vertical-align: middle;
-        }
-      }
-
-      button {
-        background-color: white;
-        border: none;
-        color: #373737;
-        font-weight: 300;
-        padding: 15px;
-        position: absolute;
-        right: 10px;
-
-        &:hover {
-          cursor: pointer;
         }
       }
     }
@@ -160,7 +144,6 @@
 @media(max-width: 500px) {
   .config-container {
     display: flex;
-    flex-direction: column-reverse;
     padding: 0;
 
     .list {

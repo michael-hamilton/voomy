@@ -9,6 +9,7 @@
     align-items: center;
     background-color: #1f80ee;
     display: flex;
+    justify-content: space-between;
     padding: 10px;
 
     h1 {
@@ -16,9 +17,6 @@
     }
 
     .nav {
-      position: absolute;
-      right: 10px;
-
       a {
         color: white;
         margin: 10px;
@@ -34,6 +32,10 @@
         &:hover:not(.active) {
           background-color: #999999;
         }
+
+        &:last-child {
+          margin-right: 0;
+        }
       }
     }
   }
@@ -42,5 +44,16 @@
 @media(max-width: 500px) {
   .app-container {
     padding-bottom: 0;
+  }
+}
+
+@media (orientation: landscape) {
+  .app-container {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
+
+    .header {
+      padding: 10px 0;
+    }
   }
 }

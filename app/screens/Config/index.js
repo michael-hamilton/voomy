@@ -70,7 +70,13 @@ class Config extends Component {
     if (confirm('Change drive?')) {
       this.setState({
         videoPath: e.target.getAttribute('data-drive')
-      }, () => this.updateVideoPath(e));
+      }, () => this.saveVideoPath(e));
+    }
+  }
+
+  confirmSaveVideoPath(e) {
+    if (confirm('Change video path?')) {
+      this.saveVideoPath(e);
     }
   }
 
@@ -80,17 +86,19 @@ class Config extends Component {
     this.setState({videoPath: response.data});
   }
 
-  async updateVideoPath(e) {
+  async saveVideoPath(e) {
     e.preventDefault();
     await axios.post('/videopath', {videoPath: this.state.videoPath});
-    alert('Updated video path.');
   }
 
   render() {
     return (
       <div className={'config-container'}>
         <div className={'videopath-form-wrapper'}>
-          <form className={'form'} onSubmit={(e) => this.updateVideoPath(e)}>
+          <form
+            className={'form'}
+            onSubmit={(e) => this.confirmSaveVideoPath(e)}
+          >
             <input
               onChange={(e) => this.handleVideoPathChange(e)}
               placeholder={'video search path'}
