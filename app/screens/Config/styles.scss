@@ -59,6 +59,7 @@
       border: none;
       border-radius: 0;
       flex: 2;
+      font-family: Helvetica, sans-serif;
       font-weight: 300;
       padding: 15px;
 
@@ -71,6 +72,8 @@
       background-color: white;
       border: none;
       color: #373737;
+      font-family: Helvetica, sans-serif;
+      font-size: 14px;
       font-weight: 300;
       padding: 15px;
 
@@ -95,7 +98,7 @@
         color: #373737;
         display: block;
         height: 100%;
-        font-size: 10px;
+        font-size: 14px;
         padding: 15px;
         transition: 0.125s;
         text-decoration: none;
@@ -141,10 +144,11 @@
   }
 }
 
-@media(max-width: 500px) {
+// Desktop
+@media (min-width: 892px) {
   .config-container {
     display: flex;
-    padding: 0;
+    padding-bottom: 0;
 
     .list {
       flex: 3;
@@ -160,3 +164,9 @@
   }
 }
 
+// Mobile Landscape
+@media (max-width: 891px) and (orientation: landscape) {
+  .config-container {
+    padding-bottom: 20px;
+  }
+}

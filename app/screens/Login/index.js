@@ -29,32 +29,24 @@ class Login extends Component {
   render() {
     return (
       <div className={'login-container'}>
-        {
-          !this.props.isLoggedIn ? (
-            <div className={'login-form-wrapper'}>
-              <h1 className={'login-heading'}>vidserve</h1>
-              <form
-                className={'form'}
-                onSubmit={(e) => this.login(e)}
-              >
-                <input
-                  onChange={(e) => this.handlePasswordChange(e)}
-                  placeholder={'pin'}
-                  type={'password'}
-                  inputmode={'numeric'}
-                  maxlength="4"
-                  pattern="[0-9]{4}"
-                  value={this.state.pin}
-                />
-                <button type={'submit'}>login</button>
-              </form>
-            </div>
-          ) :
-            <div className={'login-form-wrapper'}>
-              <h1 className={'login-heading'}>vidserve</h1>
-              <h2 className={'login-subheading'}>logged in</h2>
-            </div>
-        }
+        <div className={'login-form-wrapper'}>
+          <h1 className={'login-heading'}>vidserve</h1>
+          <form
+            className={'form'}
+            onSubmit={(e) => this.login(e)}
+          >
+            <input
+              onChange={(e) => this.handlePasswordChange(e)}
+              placeholder={'pin'}
+              type={'password'}
+              inputmode={'numeric'}
+              maxlength="4"
+              pattern="[0-9]{4}"
+              value={this.state.pin}
+            />
+            <button type={'submit'}>login</button>
+          </form>
+        </div>
       </div>
     );
   }
