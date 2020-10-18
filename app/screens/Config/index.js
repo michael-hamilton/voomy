@@ -7,7 +7,7 @@ const renderDriveList = (drives, clickHandle) => {
     <ul className={'drivelist'}>
       {drives.map((drive, index) =>
         <li key={index} className={'list-item'}>
-          <button data-drive={drive.device} onClick={clickHandle}>
+          <button data-drive={drive.mountpoints[0].path} onClick={clickHandle}>
             {drive.mountpoints[0].path}
           </button>
         </li>
