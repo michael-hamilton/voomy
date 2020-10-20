@@ -2,6 +2,14 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import './styles.scss';
 
+// Returns a human readable size from number of bytes
+const prettifyByteSize = (bytes) => {
+  const i = Math.floor(Math.log(bytes) / Math.log(1024))
+  const sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+  return (bytes / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + sizes[i];
+}
+
 const renderDriveList = (drives, clickHandle) => {
   if (drives.length) {
     return (
@@ -9,7 +17,7 @@ const renderDriveList = (drives, clickHandle) => {
         {drives.map((drive, index) =>
           <li key={index} className={'list-item'}>
             <button data-drive={drive.mountpoints[0].path} onClick={clickHandle}>
-              {drive.mountpoints[0].path}
+              {drive.mountpoints[0].label} - {prettifyByteSize(drive.size)}
             </button>
           </li>
         )}

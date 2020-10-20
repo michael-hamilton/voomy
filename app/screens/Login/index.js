@@ -39,8 +39,8 @@ class Login extends Component {
               onChange={(e) => this.handlePinChange(e)}
               placeholder={'pin'}
               type={'password'}
-              inputmode={'numeric'}
-              maxlength="4"
+              inputMode={'numeric'}
+              maxLength="4"
               pattern="[0-9]{4}"
               value={this.state.pin}
             />
