@@ -74,7 +74,7 @@ const app = express();
   });
 
   app.post('/mountdrive', async (req, res, next) => {
-    fs.mkdirSync('mkdir', '/mnt/a');
+    fs.mkdirSync('/mnt/a');
     fs.fchownSync('/mnt/a', userid.uid(), userid.gid());
     mnt = spawn('sudo', ['mount', req.body.device, `/mnt/a`]);
     mnt.stdout.on('data', data => console.log(`data: ${data}`));
