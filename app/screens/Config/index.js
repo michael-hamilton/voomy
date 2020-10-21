@@ -107,8 +107,7 @@ class Config extends Component {
 
   async saveVideoPath(e) {
     e.preventDefault();
-    // await axios.post('/videopath', {videoPath: this.state.videoPath});
-    await axios.post('/mountdrive', {device: this.state.videoPath});
+    await axios.post('/videopath', {videoPath: this.state.videoPath});
   }
 
   async savePin(e) {

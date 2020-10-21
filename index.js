@@ -72,11 +72,6 @@ const app = express();
     res.send('ok');
   });
 
-  app.post('/mountdrive', async (req, res, next) => {
-    spawn('sudo', ['mount', req.body.device, `/mnt/${req.body.device}`]);
-    res.send('ok');
-  });
-
   app.get('*', (req, res, next) => {
     res.sendFile(`${__dirname}/dist/index.html`);
   });
