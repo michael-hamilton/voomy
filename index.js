@@ -73,9 +73,9 @@ const app = express();
   });
 
   app.post('/mountdrive', async (req, res, next) => {
-    spawnSync('mkdir', [`/mnt${req.body.device}`]);
-    spawnSync('chown', ['$USER', `/mnt${req.body.device}`]);
-    const mnt = spawn('sudo', ['mount', req.body.device, `/mnt${req.body.device}`]);
+    spawnSync('mkdir', [`/mnt/a`]);
+    spawnSync('chown', ['$USER', `/mnt/a`]);
+    const mnt = spawn('sudo', ['mount', req.body.device, `/mnt/a`]);
     mnt.stdout.on('data', data => console.log(`data: ${data}`));
     mnt.stderr.on('data', data => console.log(`err: ${data}`));
     res.send('ok');
