@@ -73,7 +73,7 @@ const app = express();
   });
 
   app.post('/mountdrive', async (req, res, next) => {
-    spawn('sudo', ['mount', req.body.device, `/mnt/${req.body.device}`]);
+    spawn('sudo', ['mount', req.body.device, `/mnt/${req.body.device}`], (err, stdout, stderr) => console.log(stdout));
     res.send('ok');
   });
 
