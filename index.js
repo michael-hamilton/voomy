@@ -3,7 +3,7 @@ const cors = require('cors');
 const drivelist = require('drivelist');
 const express = require('express');
 const fs = require('fs');
-const { spawn } = require('child_process');
+const { spawn, spawnSync } = require('child_process');
 const storage = require('node-persist');
 
 const app = express();
@@ -73,6 +73,8 @@ const app = express();
   });
 
   app.post('/mountdrive', async (req, res, next) => {
+    spawnSync('mkdir', [`/mnt${req.body.device}`]);
+    spawnSync('chown', ['$USER', `/mnt${req.body.device}`]);
     const mnt = spawn('sudo', ['mount', req.body.device, `/mnt${req.body.device}`]);
     mnt.stdout.on('data', data => console.log(`data: ${data}`));
     mnt.stderr.on('data', data => console.log(`err: ${data}`));
