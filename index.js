@@ -86,7 +86,7 @@ const app = express();
     catch (err) {
       console.log('Mountpoint ownership already set.')
     }
-    mnt = spawn('sudo', ['mount', req.body.device, `/mnt/a`]);
+    mnt = spawn('sudo', ['mount', `${req.body.device}`, `/mnt/a`]);
     mnt.stdout.on('data', data => console.log(`data: ${data}`));
     mnt.stderr.on('data', data => console.log(`err: ${data}`));
     res.send('ok');
