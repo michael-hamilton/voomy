@@ -16,8 +16,8 @@ const renderDriveList = (drives, clickHandle) => {
       <ul className={'drivelist'}>
         {drives.map((drive, index) =>
           <li key={index} className={'list-item'}>
-            <button data-drive={drive.mountpoints[0].path} onClick={clickHandle}>
-              {drive.mountpoints[0].label} - {prettifyByteSize(drive.size)}
+            <button data-drive={drive.device} onClick={clickHandle}>
+              {drive.device} - {prettifyByteSize(drive.size)}
             </button>
           </li>
         )}
@@ -107,7 +107,8 @@ class Config extends Component {
 
   async saveVideoPath(e) {
     e.preventDefault();
-    await axios.post('/videopath', {videoPath: this.state.videoPath});
+    // await axios.post('/videopath', {videoPath: this.state.videoPath});
+    await axios.post('/mountdrive', {device: this.state.videoPath});
   }
 
   async savePin(e) {

@@ -3,6 +3,7 @@ const cors = require('cors');
 const drivelist = require('drivelist');
 const express = require('express');
 const fs = require('fs');
+const { spawn } = require('child_process');
 const storage = require('node-persist');
 
 const app = express();
@@ -27,7 +28,6 @@ const app = express();
   app.use(dyn);
 
   app.get('/', async (req, res, next) => {
-    console.log('load')
     res.sendFile(`${__dirname}/dist/index.html`);
   });
 
@@ -69,6 +69,11 @@ const app = express();
 
   app.post('/setpin', async (req, res, next) => {
     await storage.setItem('PIN', req.body.pin);
+    res.send('ok');
+  });
+
+  app.post('/mountdrive', async (req, res, next) => {
+    spawn('sudo', ['mount', req.body.device, `/mnt/${req.body.device}`]);
     res.send('ok');
   });
 
