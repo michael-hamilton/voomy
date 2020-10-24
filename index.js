@@ -50,7 +50,7 @@ const app = express();
       items = items.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item.name));
 
       const files = items.map((item,index) => {
-        return {name: item.name, isDirectory: item.isDirectory(), file: encodeURI(item.name), path: encodeURI(`${newPath}/${item.name}`)};
+        return {name: item.name, isDirectory: item.isDirectory(), file: encodeURI(item.name), path: `${newPath}/${item.name}`};
       });
 
       res.send({files, newPath});

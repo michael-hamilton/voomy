@@ -146,14 +146,14 @@ class Videos extends Component {
 
           <div className={'list-body'}>
             {
+              (this.state.isFileListLoading && !this.state.hasFileListLoaded) ?
+                <div className={'message-wrapper'}><p>loading...</p></div> :
+                renderFileList(this.state.files, this.state.selectedFileID, this.state.searchTerm, this.handleItemSelect.bind(this))
+            }
+            {
               this.state.homePath !== this.state.directory ?
                 <button className={'up-dir-button'} onClick={() => this.upDirectory()}>&#8624;</button> :
                 null
-            }
-            {
-              (this.state.isFileListLoading && !this.state.hasVideoListLoaded) ?
-                <div className={'message-wrapper'}><p>loading...</p></div> :
-                renderFileList(this.state.files, this.state.selectedFileID, this.state.searchTerm, this.handleItemSelect.bind(this))
             }
           </div>
         </div>
