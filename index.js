@@ -2,7 +2,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const drivelist = require('drivelist');
 const express = require('express');
-const fs = require('fs');
+const path = require('path');
+const fs = require('fs').promises;
 const { spawn } = require('child_process');
 const storage = require('node-persist');
 
@@ -11,7 +12,7 @@ const app = express();
 (async () => {
   await storage.init({dir: 'APPDATA'});
 
-  let VIDEO_PATH = await storage.getItem('VIDEO_PATH') || '/';
+  let HOME_PATH = await storage.getItem('HOME_PATH') || '/';
 
   app.use(express.static(`${__dirname}/dist`));
   app.use(cors());
@@ -20,11 +21,13 @@ const app = express();
   const createDynStatic = (path) => {
     let st = express.static(path)
     let dyn = (req, res, next) => st(req, res, next);
-    dyn.setPath = (newPath) => st = express.static(newPath);
+    dyn.setPath = (newPath) => {
+      st = express.static(newPath);
+    }
     return dyn;
   }
 
-  const dyn = createDynStatic(VIDEO_PATH);
+  const dyn = createDynStatic(HOME_PATH);
   app.use(dyn);
 
   app.get('/', async (req, res, next) => {
@@ -35,24 +38,35 @@ const app = express();
     res.send(await drivelist.list());
   });
 
-  app.get('/videolist', async (req, res, next) => {
+  app.get('/directory', async (req, res, next) => {
     try {
-      let files = fs.readdirSync(VIDEO_PATH);
-      files = files.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item));
-      res.send(files.map(file => encodeURI(file)));
+      const up = req.query.up ? '..' : '';
+      const tmpPath = req.query.path ? req.query.path : HOME_PATH;
+      const newPath = path.resolve(`${tmpPath}/${up}`);
+      dyn.setPath(newPath);
+
+      let items = await fs.readdir(newPath, {withFileTypes: true});
+
+      items = items.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item.name));
+
+      const files = items.map((item,index) => {
+        return {name: item.name, isDirectory: item.isDirectory(), file: encodeURI(item.name), path: encodeURI(`${newPath}/${item.name}`)};
+      });
+
+      res.send({files, newPath});
     } catch (err) {
       res.send([]);
     }
   });
 
-  app.get('/videopath', (req, res, next) => {
-    res.send(VIDEO_PATH);
+  app.get('/homepath', (req, res, next) => {
+    res.send(HOME_PATH);
   });
 
-  app.post('/videopath', async (req, res, next) => {
-    VIDEO_PATH = req.body.videoPath;
-    dyn.setPath(VIDEO_PATH);
-    await storage.setItem('VIDEO_PATH', VIDEO_PATH);
+  app.post('/homepath', async (req, res, next) => {
+    HOME_PATH = req.body.homePath;
+    dyn.setPath(HOME_PATH);
+    await storage.setItem('HOME_PATH', HOME_PATH);
     res.send('ok');
   });
 

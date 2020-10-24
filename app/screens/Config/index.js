@@ -14,13 +14,20 @@ const renderDriveList = (drives, clickHandle) => {
   if (drives.length) {
     return (
       <ul className={'drivelist'}>
-        {drives.map((drive, index) =>
-          <li key={index} className={'list-item'}>
-            <button data-drive={drive.device} onClick={clickHandle}>
-              {drive.device} - {prettifyByteSize(drive.size)}
-            </button>
-          </li>
-        )}
+        {
+          drives.map((drive, index) => {
+            if (drive.mountpoints.length) {
+              return (
+                <li key={index} className={'list-item'}>
+                  <button data-drive={drive.mountpoints[0].path} onClick={clickHandle}>
+                    {drive.mountpoints[0].label} - {prettifyByteSize(drive.size)}
+                  </button>
+                </li>
+              );
+            }
+            }
+          )
+        }
       </ul>
     )
   }
@@ -41,7 +48,7 @@ class Config extends Component {
       drives: [],
       hasDriveListLoaded: false,
       isDriveListLoading: false,
-      videoPath: '',
+      homePath: '',
       pin: '',
     };
 
@@ -50,7 +57,7 @@ class Config extends Component {
 
   componentDidMount() {
     this.getDriveList();
-    this.getVideoPath();
+    this.gethomePath();
 
     this.pollInterval = setInterval(() => this.getDriveList(), 5000);
   }
@@ -71,8 +78,8 @@ class Config extends Component {
     });
   }
 
-  handleVideoPathChange(e) {
-    this.setState({videoPath: e.target.value});
+  handlehomePathChange(e) {
+    this.setState({homePath: e.target.value});
   }
 
   handlePinChange(e) {
@@ -82,14 +89,14 @@ class Config extends Component {
   handleDriveSelect(e) {
     if (confirm('Change drive?')) {
       this.setState({
-        videoPath: e.target.getAttribute('data-drive')
-      }, () => this.saveVideoPath(e));
+        homePath: e.target.getAttribute('data-drive')
+      }, () => this.savehomePath(e));
     }
   }
 
-  confirmSaveVideoPath(e) {
-    if (confirm('Change video path?')) {
-      this.saveVideoPath(e);
+  confirmSavehomePath(e) {
+    if (confirm('Change home path?')) {
+      this.savehomePath(e);
     }
   }
 
@@ -99,15 +106,15 @@ class Config extends Component {
     }
   }
 
-  async getVideoPath() {
-    const response = await axios.get('/videopath');
+  async gethomePath() {
+    const response = await axios.get('/homePath');
 
-    this.setState({videoPath: response.data});
+    this.setState({homePath: response.data});
   }
 
-  async saveVideoPath(e) {
+  async savehomePath(e) {
     e.preventDefault();
-    await axios.post('/videopath', {videoPath: this.state.videoPath});
+    await axios.post('/homePath', {homePath: this.state.homePath});
   }
 
   async savePin(e) {
@@ -139,13 +146,13 @@ class Config extends Component {
         <div className={'form-wrapper'}>
           <form
             className={'form'}
-            onSubmit={(e) => this.confirmSaveVideoPath(e)}
+            onSubmit={(e) => this.confirmSavehomePath(e)}
           >
             <input
-              onChange={(e) => this.handleVideoPathChange(e)}
-              placeholder={'video search path'}
+              onChange={(e) => this.handlehomePathChange(e)}
+              placeholder={'home search path'}
               type={'text'}
-              value={this.state.videoPath}
+              value={this.state.homePath}
             />
             <button type={'submit'}>save</button>
           </form>
