@@ -79,7 +79,7 @@ class Config extends Component {
 
     if (response.data.status === 'ok') {
       this.setState({
-        drives: [],
+        drives: response.data.drives,
         hasDriveListLoaded: true,
         isDriveListLoading: false
       });
