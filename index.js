@@ -35,7 +35,12 @@ const app = express();
   });
 
   app.get('/drivelist', async (req, res, next) => {
-    res.send(await drivelist.list());
+    try {
+      const drives = await drivelist.list();
+      res.send({drives, status: 'ok'});
+    } catch (err) {
+      res.send({status: 'err', message: err});
+    }
   });
 
   app.get('/directory', async (req, res, next) => {
@@ -53,9 +58,9 @@ const app = express();
         return {name: item.name, isDirectory: item.isDirectory(), file: encodeURI(item.name), path: `${newPath}/${item.name}`};
       });
 
-      res.send({files, newPath});
+      res.send({files, newPath, status: 'ok'});
     } catch (err) {
-      res.send([]);
+      res.send({status: 'err', message: err});
     }
   });
 

@@ -38,12 +38,14 @@
     }
 
     .list-body {
+      display: flex;
+      flex-direction: column;
       flex: 1;
 
       .message-wrapper {
         align-items: center;
         display: flex;
-        height: 100%;
+        flex: 1;
         justify-content: center;
         width: 100%;
       }
@@ -93,7 +95,7 @@
     list-style: none;
     overflow-x: hidden;
     overflow-y: scroll;
-    padding-bottom: 48px;
+    position: absolute;
     width: 100%;
 
     .list-item {

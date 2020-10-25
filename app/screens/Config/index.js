@@ -76,6 +76,21 @@ class Config extends Component {
       hasDriveListLoaded: true,
       isDriveListLoading: false
     });
+
+    if (response.data.status === 'ok') {
+      this.setState({
+        drives: [],
+        hasDriveListLoaded: true,
+        isDriveListLoading: false
+      });
+    }
+    else {
+      this.setState({
+        drives: [],
+        hasDriveListLoaded: true,
+        isDriveListLoading: false
+      });
+    }
   }
 
   handlehomePathChange(e) {

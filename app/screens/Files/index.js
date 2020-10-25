@@ -80,12 +80,21 @@ class Files extends Component {
 
     const response = await axios.get(`/directory${query}`);
 
-    this.setState({
-      hasFileListLoaded: true,
-      isFileListLoading: false,
-      files: response.data.files,
-      directory: response.data.newPath
-    });
+    if (response.data.status === 'ok') {
+      this.setState({
+        hasFileListLoaded: true,
+        isFileListLoading: false,
+        files: response.data.files,
+        directory: response.data.newPath
+      });
+    }
+    else {
+      this.setState({
+        hasFileListLoaded: true,
+        isFileListLoading: false,
+        files: [],
+      });
+    }
   }
 
   async upDirectory() {

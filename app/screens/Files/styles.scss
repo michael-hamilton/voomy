@@ -80,22 +80,27 @@
 
           &:active {
             background-color: transparent;
+            outline: none;
           }
         }
       }
     }
 
     .list-body {
+      display: flex;
+      flex-direction: column;
       flex: 1;
+      margin-bottom: env(safe-area-inset-bottom);
 
       .up-dir-button {
         background-color: #43536b;
         border: none;
-        bottom: 40px;
+        bottom: 0;
         color: white;
         margin-right: 10px;
-        padding: 20px;
+        padding: 30px 30px calc(env(safe-area-inset-bottom) + 20px) 30px;
         position: absolute;
+        transition: 0.125s;
         width: 100%;
 
         &:active {
@@ -107,6 +112,7 @@
         }
 
         &:hover {
+          background-color: #344054;
           cursor: pointer;
         }
       }
@@ -114,8 +120,9 @@
       .message-wrapper {
         align-items: center;
         display: flex;
-        height: 100%;
+        flex: 1;
         justify-content: center;
+        padding-bottom: 75px;
         width: 100%;
       }
     }
@@ -126,7 +133,7 @@
     list-style: none;
     overflow-x: hidden;
     overflow-y: scroll;
-    padding-bottom: 70px;
+    padding-bottom: calc(env(safe-area-inset-bottom) + 75px);
     position: absolute;
     width: 100%;
 
@@ -198,17 +205,9 @@
   .files-container {
     display: flex;
     flex-direction: row;
-    padding: 0;
 
     .list {
       flex: 2;
-
-      .list-body {
-        .up-dir-button {
-          bottom: 0;
-          padding: 30px 30px 35px 30px;
-        }
-      }
     }
 
     .filelist {
@@ -245,10 +244,21 @@
       }
 
       .list-body {
+        margin-bottom: 0;
+
         .up-dir-button {
           bottom: 0;
+          padding: 20px;
+        }
+
+        .message-wrapper {
+          padding-bottom: 50px;
         }
       }
+    }
+
+    .filelist {
+      padding-bottom: 70px;
     }
 
     .fileviewer-wrapper {
@@ -261,17 +271,7 @@
 @media (max-width: 891px) and (orientation: portrait) {
   .files-container {
     .list {
-      flex: 3;
-
-      .list-body {
-        .up-dir-button {
-          padding: 30px 30px 35px 30px;
-        }
-      }
-
-      .filelist {
-        padding-bottom: 140px;
-      }
+      flex: 4;
     }
 
     .fileviewer-wrapper {
