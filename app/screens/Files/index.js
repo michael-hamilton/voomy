@@ -9,7 +9,7 @@ const renderFileList = (files, selectedID, searchTerm, handleClick) => {
       <ul className={'filelist'}>
         {
           files.filter(file =>
-            decodeURI(file.toString())
+            decodeURI(file.name.toString())
               .toLowerCase()
               .indexOf(searchTerm.toLowerCase())
             !== -1
@@ -119,12 +119,17 @@ class Files extends Component {
     this.setState({homePath: response.data});
   }
 
+  clearSearch() {
+    this.setState({searchTerm: ''});
+  }
+
   handleItemSelect(e) {
     e.preventDefault();
     if (e.target.getAttribute('data-isdirectory') === 'true') {
       this.setState({
         directory: e.target.getAttribute('href')
       }, () => {
+        this.clearSearch();
         this.getDirectory();
       });
     }
@@ -140,7 +145,14 @@ class Files extends Component {
           <div className={'list-header'}>
             <h2>files&nbsp;<small>({this.state.files.length})</small></h2>
             <div className={'search-wrapper'}>
-              <input type={'text'} placeholder={'search...'} onChange={(e) => this.handleSearch(e)} />
+              <input type={'text'} placeholder={'search...'} value={this.state.searchTerm} onChange={(e) => this.handleSearch(e)} />
+              {
+                this.state.searchTerm ?
+                  <button className={'clear-search'} onClick={() => this.clearSearch()}>
+                    x
+                  </button> :
+                  null
+              }
             </div>
           </div>
 
