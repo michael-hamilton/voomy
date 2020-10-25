@@ -95,7 +95,6 @@
     list-style: none;
     overflow-x: hidden;
     overflow-y: scroll;
-    position: absolute;
     width: 100%;
 
     .list-item {
@@ -155,6 +154,6 @@
 // Mobile Landscape
 @media (max-width: 891px) and (orientation: landscape) {
   .config-container {
-    padding-bottom: 10px;
+    padding-bottom: 20px;
   }
 }
