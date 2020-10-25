@@ -8,8 +8,8 @@ const renderFileList = (files, selectedID, searchTerm, handleClick) => {
     return (
       <ul className={'filelist'}>
         {
-          files.filter(video =>
-            decodeURI(video.toString())
+          files.filter(file =>
+            decodeURI(file.toString())
               .toLowerCase()
               .indexOf(searchTerm.toLowerCase())
             !== -1
@@ -35,13 +35,13 @@ const renderFileList = (files, selectedID, searchTerm, handleClick) => {
   else {
     return (
       <div className={'message-wrapper'}>
-        <p>no videos</p>
+        <p>no files</p>
       </div>
     );
   }
 };
 
-class Videos extends Component {
+class Files extends Component {
   constructor(props) {
     super(props);
 
@@ -110,7 +110,7 @@ class Videos extends Component {
     this.setState({searchTerm: e.target.value});
   }
 
-  playVideo(selectedFileID, selectedFileURL) {
+  playFile(selectedFileID, selectedFileURL) {
     this.setState({selectedFileID, selectedFileURL});
   }
 
@@ -129,16 +129,16 @@ class Videos extends Component {
       });
     }
     else {
-      this.playVideo(e.target.getAttribute('data-index'), e.target.href)
+      this.playFile(e.target.getAttribute('data-index'), e.target.href)
     }
   }
 
   render() {
     return (
-      <div className={'videos-container'}>
+      <div className={'files-container'}>
         <div className={'list'}>
           <div className={'list-header'}>
-            <h2>videos&nbsp;<small>({this.state.files.length})</small></h2>
+            <h2>files&nbsp;<small>({this.state.files.length})</small></h2>
             <div className={'search-wrapper'}>
               <input type={'text'} placeholder={'search...'} onChange={(e) => this.handleSearch(e)} />
             </div>
@@ -158,7 +158,7 @@ class Videos extends Component {
           </div>
         </div>
 
-        <div className={'videoplayer-wrapper'}>
+        <div className={'fileviewer-wrapper'}>
           <ReactPlayer playing={true} playsinline url={this.state.selectedFileURL} controls height={'100%'} width={'100%'} />
         </div>
       </div>
@@ -166,4 +166,4 @@ class Videos extends Component {
   }
 }
 
-export default Videos;
+export default Files;

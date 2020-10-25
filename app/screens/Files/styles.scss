@@ -1,7 +1,8 @@
-.videos-container {
+.files-container {
   display: flex;
   flex: 1;
   flex-direction: column-reverse;
+  max-height: 100vh;
 
   .list {
     background-color: #efefef;
@@ -22,11 +23,15 @@
 
       h2 {
         color: white;
+        display: flex;
         flex: 2;
 
         small {
+          align-items: center;
+          display: flex;
           font-size: 14px;
           font-weight: 300;
+          justify-content: center;
           vertical-align: middle;
         }
       }
@@ -63,7 +68,7 @@
       .up-dir-button {
         background-color: #43536b;
         border: none;
-        bottom: 0;
+        bottom: 40px;
         color: white;
         margin-right: 10px;
         padding: 20px;
@@ -139,21 +144,23 @@
         }
       }
 
-      &:hover:not(.active) {
-        background-color: #999999;
+      @media (hover: hover) {
+        &:hover:not(.active) {
+          background-color: #999999;
 
-        a {
-          color: white;
-
-          .directoryIcon {
+          a {
             color: white;
+
+            .directoryIcon {
+              color: white;
+            }
           }
         }
       }
     }
   }
 
-  .videoplayer-wrapper {
+  .fileviewer-wrapper {
     align-items: flex-start;
     background-color: black;
     display: flex;
@@ -165,13 +172,20 @@
 
 // Desktop
 @media (min-width: 892px) {
-  .videos-container {
+  .files-container {
     display: flex;
     flex-direction: row;
     padding: 0;
 
     .list {
       flex: 2;
+
+      .list-body {
+        .up-dir-button {
+          bottom: 0;
+          padding: 30px 30px 35px 30px;
+        }
+      }
     }
 
     .filelist {
@@ -182,7 +196,7 @@
       }
     }
 
-    .videoplayer-wrapper {
+    .fileviewer-wrapper {
       flex: 3;
       margin: 0;
     }
@@ -191,7 +205,7 @@
 
 // Mobile Landscape
 @media (max-width: 891px) and (orientation: landscape) {
-  .videos-container {
+  .files-container {
     flex-direction: row;
     padding-bottom: 20px;
 
@@ -206,9 +220,15 @@
           }
         }
       }
+
+      .list-body {
+        .up-dir-button {
+          bottom: 0;
+        }
+      }
     }
 
-    .videoplayer-wrapper {
+    .fileviewer-wrapper {
       flex: 3;
     }
   }
@@ -216,13 +236,12 @@
 
 // Mobile Portrait
 @media (max-width: 891px) and (orientation: portrait) {
-  .videos-container {
+  .files-container {
     .list {
       flex: 3;
 
       .list-body {
         .up-dir-button {
-          bottom: 40px;
           padding: 30px 30px 35px 30px;
         }
       }
@@ -232,7 +251,7 @@
       }
     }
 
-    .videoplayer-wrapper {
+    .fileviewer-wrapper {
       flex: 2;
     }
   }

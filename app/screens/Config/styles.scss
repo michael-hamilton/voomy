@@ -2,12 +2,12 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+  max-height: 100vh;
 
   .list {
     background-color: #efefef;
     border: 1px solid #373737;
     display: flex;
-    flex: 1;
     flex-direction: column;
     min-height: 100px;
     min-width: 300px;
@@ -23,10 +23,15 @@
 
       h2 {
         color: white;
+        display: flex;
+        flex: 2;
 
         small {
+          align-items: center;
+          display: flex;
           font-size: 14px;
           font-weight: 300;
+          justify-content: center;
           vertical-align: middle;
         }
       }
@@ -89,7 +94,6 @@
     overflow-x: hidden;
     overflow-y: scroll;
     padding-bottom: 48px;
-    position: absolute;
     width: 100%;
 
     .list-item {
@@ -136,10 +140,6 @@
     display: flex;
     padding-bottom: 0;
 
-    .list {
-      flex: 3;
-    }
-
     .drivelist {
       .list-item {
         a {
@@ -153,6 +153,6 @@
 // Mobile Landscape
 @media (max-width: 891px) and (orientation: landscape) {
   .config-container {
-    padding-bottom: 20px;
+    padding-bottom: 10px;
   }
 }

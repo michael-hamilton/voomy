@@ -24,97 +24,46 @@
       display: flex;
       flex-direction: column;
       justify-content: center;
-      width: 100%;
-    }
 
-    input {
-      background-color: #efefef;
-      border: none;
-      border-radius: 0;
-      flex: 2;
-      font-family: Helvetica, sans-serif;
-      font-size: 20px;
-      font-weight: 200;
-      margin: 10px;
-      padding: 25px;
+      .pin-wrapper {
+        display: flex;
+        height: 60px;
+        justify-content: center;
+        margin: 20px;
+        width: 320px;
 
-      &:focus {
-        outline: none;
-      }
-    }
+        input {
+          background-color: #efefef;
+          border: none;
+          border-radius: 5rem 0 0 5rem;
+          font-family: Helvetica, sans-serif;
+          font-size: 20px;
+          font-weight: 200;
+          outline: none;
+          padding: 25px;
+          text-align: center;
+          width: 50%;
 
-    button {
-      background-color: white;
-      border: none;
-      border-radius: 20px;
-      color: #373737;
-      font-family: Helvetica, sans-serif;
-      font-size: 18px;
-      font-weight: 200;
-      margin: 10px;
-      padding: 15px;
-      width: 100px;
-
-      &:hover {
-        cursor: pointer;
-      }
-    }
-  }
-
-  .drivelist {
-    height: 100%;
-    list-style: none;
-    overflow-x: hidden;
-    overflow-y: scroll;
-    padding-bottom: 48px;
-    position: absolute;
-    width: 100%;
-
-    .list-item {
-      button {
-        border: none;
-        color: #373737;
-        display: block;
-        height: 100%;
-        font-size: 10px;
-        padding: 15px;
-        transition: 0.125s;
-        text-decoration: none;
-        width: 100%;
-
-        &:hover {
-          background-color: lightgoldenrodyellow;
-          color: #373737;
-          cursor: pointer;
+          &:focus {
+            outline: none;
+          }
         }
-      }
-
-      &:nth-child(2n) {
 
         button {
-          background-color: #999999;
+          background: linear-gradient(to bottom, #14a1e6 0%, #2658c7 50%, #172d80 100%);
+          border: none;
+          border-radius: 0 5rem 5rem 0;
           color: white;
-        }
+          font-family: Helvetica, sans-serif;
+          font-size: 18px;
+          font-weight: 200;
+          outline: transparent;
+          padding: 15px;
+          user-select: none;
+          -webkit-user-select: none;
 
-        &.active {
-          button {
-            color: #373737;
-          }
-        }
-
-        &:hover {
-          button {
-            color: #373737;
-          }
-        }
-      }
-
-      &.active {
-        background-color: lightgoldenrodyellow;
-
-        &:hover {
-          button {
-            color: #373737;
+          &:hover {
+            cursor: pointer;
           }
         }
       }
@@ -122,22 +71,14 @@
   }
 }
 
-@media(max-width: 500px) {
-  .config-container {
-    display: flex;
-    padding: 0;
+// Mobile Portrait
+@media (max-width: 891px) and (orientation: portrait) {
+  .login-container {
 
-    .list {
-      flex: 3;
-    }
-
-    .drivelist {
-      .list-item {
-        a {
-          font-size: 14px;
-        }
-      }
+    .login-form-wrapper {
+      padding-bottom: 60px;
     }
   }
 }
+
 

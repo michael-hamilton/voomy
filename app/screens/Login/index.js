@@ -35,16 +35,18 @@ class Login extends Component {
             className={'form'}
             onSubmit={(e) => this.login(e)}
           >
-            <input
-              onChange={(e) => this.handlePinChange(e)}
-              placeholder={'pin'}
-              type={'password'}
-              inputMode={'numeric'}
-              maxLength="4"
-              pattern="[0-9]{4}"
-              value={this.state.pin}
-            />
-            <button type={'submit'}>login</button>
+            <div className={'pin-wrapper'}>
+              <input
+                onChange={(e) => this.handlePinChange(e)}
+                placeholder={'pin'}
+                type={'password'}
+                inputMode={'numeric'}
+                maxLength="4"
+                pattern="[0-9]{4}"
+                value={this.state.pin}
+              />
+              <button type={'submit'}>login</button>
+            </div>
           </form>
         </div>
       </div>

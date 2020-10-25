@@ -6,8 +6,8 @@ import {
   NavLink,
 } from 'react-router-dom';
 import Config from './screens/Config';
+import Files from './screens/Files';
 import Login from './screens/Login';
-import Videos from './screens/Videos';
 import './styles.scss';
 
 class App extends Component {
@@ -28,7 +28,7 @@ class App extends Component {
               <div className={'header'}>
                 <h1>vidserve</h1>
                 <div className={'nav'}>
-                  <NavLink exact to={'/'}>videos</NavLink>
+                  <NavLink exact to={'/'}>files</NavLink>
                   <NavLink exact to={'/config'}>config</NavLink>
                 </div>
               </div> :
@@ -45,7 +45,7 @@ class App extends Component {
             <Route path={'/'}>
               {
                 this.state.isLoggedIn ?
-                  <Videos/> :
+                  <Files/> :
                   <Login login={() => this.setState({isLoggedIn: true})} />
               }
             </Route>
