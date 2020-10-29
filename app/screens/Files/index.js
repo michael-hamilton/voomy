@@ -1,7 +1,7 @@
 import React, {Component, createRef} from 'react';
 import axios from 'axios';
 import ReactPlayer from 'react-player';
-import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
+import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import './styles.scss';
 
 const renderFileList = (files, selectedID, searchTerm, handleClick, targetRef) => {
@@ -52,6 +52,7 @@ class Files extends Component {
       files: [],
       hasFileListLoaded: false,
       isFileListLoading: false,
+      isTouchingPlayer: false,
       searchTerm: '',
       selectedFileID: null,
       selectedFileURL: '#'
@@ -91,7 +92,7 @@ class Files extends Component {
         directory: response.data.newPath
       });
 
-      if (response.data.files) {
+      if (response.data.files && !this.state.isTouchingPlayer) {
         disableBodyScroll(this.targetElement.current);
       }
     }
@@ -124,6 +125,17 @@ class Files extends Component {
 
   handleSearch(e) {
     this.setState({searchTerm: e.target.value});
+  }
+
+  handlePlayerTouch(isTouchingPlayer) {
+    if (isTouchingPlayer) {
+      this.setState({isTouchingPlayer});
+      enableBodyScroll(this.targetElement.current)
+    }
+    else {
+      this.setState({isTouchingPlayer});
+      disableBodyScroll(this.targetElement.current);
+    }
   }
 
   playFile(selectedFileID, selectedFileURL) {
@@ -187,7 +199,10 @@ class Files extends Component {
         </div>
 
         <div className={'fileviewer-wrapper'}>
-          <ReactPlayer playing={true} playsinline url={this.state.selectedFileURL} controls height={'100%'} width={'100%'} />
+          <ReactPlayer
+            onTouchEnd={() => this.handlePlayerTouch(false)}
+            onTouchStart={() => this.handlePlayerTouch(true)}
+            playing={true} playsinline url={this.state.selectedFileURL} controls height={'100%'} width={'100%'} />
         </div>
       </div>
     );
