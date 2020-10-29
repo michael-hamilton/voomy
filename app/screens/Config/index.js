@@ -1,5 +1,6 @@
-import React, {Component} from 'react';
+import React, {Component, createRef} from 'react';
 import axios from 'axios';
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import './styles.scss';
 
 // Returns a human readable size from number of bytes
@@ -10,10 +11,10 @@ const prettifyByteSize = (bytes) => {
   return (bytes / Math.pow(1024, i)).toFixed(2) * 1 + ' ' + sizes[i];
 }
 
-const renderDriveList = (drives, clickHandle) => {
+const renderDriveList = (drives, clickHandle, targetRef) => {
   if (drives.length) {
     return (
-      <ul className={'drivelist'}>
+      <ul ref={targetRef} className={'drivelist'}>
         {
           drives.map((drive, index) => {
             if (drive.mountpoints.length) {
@@ -53,6 +54,7 @@ class Config extends Component {
     };
 
     this.pollInterval;
+    this.targetElement = createRef();
   }
 
   componentDidMount() {
@@ -63,6 +65,7 @@ class Config extends Component {
   }
 
   componentWillUnmount() {
+    clearAllBodyScrollLocks();
     clearInterval(this.pollInterval);
   }
 
@@ -83,6 +86,10 @@ class Config extends Component {
         hasDriveListLoaded: true,
         isDriveListLoading: false
       });
+
+      if (response.data.drives) {
+        disableBodyScroll(this.targetElement.current);
+      }
     }
     else {
       this.setState({
@@ -93,7 +100,7 @@ class Config extends Component {
     }
   }
 
-  handlehomePathChange(e) {
+  handleHomePathChange(e) {
     this.setState({homePath: e.target.value});
   }
 
@@ -164,7 +171,7 @@ class Config extends Component {
             onSubmit={(e) => this.confirmSavehomePath(e)}
           >
             <input
-              onChange={(e) => this.handlehomePathChange(e)}
+              onChange={(e) => this.handleHomePathChange(e)}
               placeholder={'home search path'}
               type={'text'}
               value={this.state.homePath}
@@ -184,7 +191,7 @@ class Config extends Component {
             {
               (this.state.isDriveListLoading && !this.state.hasDriveListLoaded) ?
                 <div className={'message-wrapper'}><p>loading...</p></div> :
-                renderDriveList(this.state.drives, this.handleDriveSelect.bind(this))
+                renderDriveList(this.state.drives, this.handleDriveSelect.bind(this), this.targetElement)
             }
           </div>
         </div>

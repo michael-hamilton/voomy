@@ -1,12 +1,13 @@
-import React, {Component} from 'react';
+import React, {Component, createRef} from 'react';
 import axios from 'axios';
 import ReactPlayer from 'react-player';
+import { disableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import './styles.scss';
 
-const renderFileList = (files, selectedID, searchTerm, handleClick) => {
+const renderFileList = (files, selectedID, searchTerm, handleClick, targetRef) => {
   if (files.length) {
     return (
-      <ul className={'filelist'}>
+      <ul ref={targetRef} className={'filelist'}>
         {
           files.filter(file =>
             decodeURI(file.name.toString())
@@ -57,6 +58,7 @@ class Files extends Component {
     };
 
     this.pollInterval;
+    this.targetElement = createRef();
   }
 
   componentDidMount() {
@@ -67,6 +69,7 @@ class Files extends Component {
   }
 
   componentWillUnmount() {
+    clearAllBodyScrollLocks();
     clearInterval(this.pollInterval);
   }
 
@@ -87,6 +90,10 @@ class Files extends Component {
         files: response.data.files,
         directory: response.data.newPath
       });
+
+      if (response.data.files) {
+        disableBodyScroll(this.targetElement.current);
+      }
     }
     else {
       this.setState({
@@ -169,7 +176,7 @@ class Files extends Component {
             {
               (this.state.isFileListLoading && !this.state.hasFileListLoaded) ?
                 <div className={'message-wrapper'}><p>loading...</p></div> :
-                renderFileList(this.state.files, this.state.selectedFileID, this.state.searchTerm, this.handleItemSelect.bind(this))
+                renderFileList(this.state.files, this.state.selectedFileID, this.state.searchTerm, this.handleItemSelect.bind(this), this.targetElement)
             }
             {
               this.state.homePath !== this.state.directory ?
