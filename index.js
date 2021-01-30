@@ -91,6 +91,16 @@ const app = express();
     res.send('ok');
   });
 
+  app.post('/delete', async (req, res, next) => {
+    if(req.body.isDirectory === true) {
+      await fs.rmdir(decodeURI(`${req.body.fileName}`));
+    }
+    else {
+      await fs.unlink(decodeURI(`${HOME_PATH}/${req.body.fileName}`));
+    }
+    res.send('ok');
+  });
+
   app.get('*', (req, res, next) => {
     res.sendFile(`${__dirname}/dist/index.html`);
   });

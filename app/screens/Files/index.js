@@ -4,10 +4,10 @@ import ReactPlayer from 'react-player';
 import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import './styles.scss';
 
-const renderFileList = (files, selectedID, searchTerm, handleClick, targetRef) => {
+const renderFileList = (files, selectedID, searchTerm, handleClick, targetRef, isEditMode, handleDelete) => {
   if (files.length) {
     return (
-      <ul ref={targetRef} className={'filelist'}>
+      <ul ref={targetRef} className={`filelist ${isEditMode ? 'edit-mode' : ''}`}>
         {
           files.filter(file =>
             decodeURI(file.name.toString())
@@ -20,7 +20,8 @@ const renderFileList = (files, selectedID, searchTerm, handleClick, targetRef) =
               className={`list-item ${selectedID == index ? 'active' : ''}`}
             >
               <a data-index={index} data-isdirectory={file.isDirectory} href={file.isDirectory ? file.path : file.file} onClick={handleClick}>
-                {file.name}
+                { isEditMode ? <button className={'delete-button'} onClick={handleDelete}>x</button> : null }
+                <span className={'list-item-title'}>{file.name}</span>
                 {
                   file.isDirectory ?
                     <span className={'directoryIcon'}>&#8627;</span> :
@@ -55,7 +56,8 @@ class Files extends Component {
       isTouchingPlayer: false,
       searchTerm: '',
       selectedFileID: null,
-      selectedFileURL: '#'
+      selectedFileURL: '#',
+      editModeEnabled: false
     };
 
     this.pollInterval;
@@ -155,7 +157,8 @@ class Files extends Component {
     e.preventDefault();
     if (e.target.getAttribute('data-isdirectory') === 'true') {
       this.setState({
-        directory: e.target.getAttribute('href')
+        directory: e.target.getAttribute('href'),
+        editModeEnabled: false
       }, () => {
         this.clearSearch();
         this.getDirectory();
@@ -166,12 +169,22 @@ class Files extends Component {
     }
   }
 
+  async handleItemDelete(e) {
+    const fileName = e.target.parentElement.getAttribute('href');
+    const isDirectory = e.target.parentElement.getAttribute('data-isdirectory') === 'true' ? true : false;
+    if (confirm(`Are you sure you want to delete this ${isDirectory ? 'folder': 'file'}?`)) {
+      await axios.post('/delete', {fileName, isDirectory});
+      await this.getDirectory();
+    }
+  }
+
   render() {
     return (
       <div className={'files-container'}>
         <div className={'list'}>
           <div className={'list-header'}>
             <h2>files&nbsp;<small>({this.state.files.length})</small></h2>
+            <button className={`edit-mode-button ${this.state.editModeEnabled ? 'active' : ''}`} onClick={() => this.setState({editModeEnabled: !this.state.editModeEnabled})}>✎</button>
             <div className={'search-wrapper'}>
               <input type={'text'} placeholder={'search...'} value={this.state.searchTerm} onChange={(e) => this.handleSearch(e)} />
               {
@@ -188,7 +201,7 @@ class Files extends Component {
             {
               (this.state.isFileListLoading && !this.state.hasFileListLoaded) ?
                 <div className={'message-wrapper'}><p>loading...</p></div> :
-                renderFileList(this.state.files, this.state.selectedFileID, this.state.searchTerm, this.handleItemSelect.bind(this), this.targetElement)
+                renderFileList(this.state.files, this.state.selectedFileID, this.state.searchTerm, this.handleItemSelect.bind(this), this.targetElement, this.state.editModeEnabled, this.handleItemDelete.bind(this))
             }
             {
               this.state.homePath !== this.state.directory ?

@@ -36,6 +36,18 @@
         }
       }
 
+      .edit-mode-button {
+        background-color: transparent;
+        border: none;
+        color: gray;
+        outline: none;
+        padding: 14px;
+
+        &.active {
+          color: white;
+        }
+      }
+
       .search-wrapper {
         display: flex;
         flex: 3;
@@ -141,19 +153,37 @@
       transition: 0.25s;
 
       a {
+        align-items: center;
         color: #373737;
-        display: block;
+        display: flex;
         font-size: 12px;
         height: 100%;
-        padding: 15px 30px 15px 15px;
+        padding: 0 30px 0 0;
         transition: 0.125s;
         text-decoration: none;
         user-select: none;
         width: 100%;
 
+        .delete-button {
+          align-items: center;
+          background-color: transparent;
+          border: none;
+          color: tomato;
+          display: flex;
+          justify-content: center;
+          margin: 0 4px 0 0;
+          outline: none;
+          padding: 14px 14px;
+        }
+
+        .list-item-title {
+          padding: 15px;
+        }
+
         .directoryIcon {
+          align-items: center;
           color: #373737;
-          display: inline-block;
+          display: flex;
           height: 20px;
           position: absolute;
           right: 10px;
@@ -186,6 +216,16 @@
             .directoryIcon {
               color: white;
             }
+          }
+        }
+      }
+    }
+
+    &.edit-mode {
+      .list-item {
+        a {
+          .list-item-title {
+            padding: 15px 0;
           }
         }
       }
