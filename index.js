@@ -101,6 +101,11 @@ const app = express();
     res.send('ok');
   });
 
+  app.post('/rename', async (req, res, next) => {
+    await fs.rename(decodeURI(`${HOME_PATH}/${req.body.oldFileName}`), decodeURI(`${HOME_PATH}/${req.body.fileName}`));
+    res.send('ok');
+  });
+
   app.get('*', (req, res, next) => {
     res.sendFile(`${__dirname}/dist/index.html`);
   });

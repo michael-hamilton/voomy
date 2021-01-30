@@ -1,10 +1,10 @@
-import React, {Component, createRef} from 'react';
+import React, {Component, createRef, useState} from 'react';
 import axios from 'axios';
 import ReactPlayer from 'react-player';
 import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
 import './styles.scss';
 
-const renderFileList = (files, selectedID, searchTerm, handleClick, targetRef, isEditMode, handleDelete) => {
+const renderFileList = (files, selectedID, searchTerm, targetRef, isEditMode, handleClick, handleChange, handleDelete) => {
   if (files.length) {
     return (
       <ul ref={targetRef} className={`filelist ${isEditMode ? 'edit-mode' : ''}`}>
@@ -21,7 +21,7 @@ const renderFileList = (files, selectedID, searchTerm, handleClick, targetRef, i
             >
               <a data-index={index} data-isdirectory={file.isDirectory} href={file.isDirectory ? file.path : file.file} onClick={handleClick}>
                 { isEditMode ? <button className={'delete-button'} onClick={handleDelete}>x</button> : null }
-                <span className={'list-item-title'}>{file.name}</span>
+                { isEditMode ? <input className={'list-item-edit'} onBlur={handleChange} data-oldvalue={file.name} placeholder={file.name} />: <span className={'list-item-title'}>{file.name}</span> }
                 {
                   file.isDirectory ?
                     <span className={'directoryIcon'}>&#8627;</span> :
@@ -57,7 +57,7 @@ class Files extends Component {
       searchTerm: '',
       selectedFileID: null,
       selectedFileURL: '#',
-      editModeEnabled: false
+      editModeEnabled: true
     };
 
     this.pollInterval;
@@ -169,6 +169,17 @@ class Files extends Component {
     }
   }
 
+  async handleItemRename(e) {
+    const fileName = e.target.value;
+    const oldFileName = e.target.getAttribute('data-oldvalue');
+    if(fileName) {
+      e.target.setAttribute('data-oldvalue', fileName);
+      e.target.value = null;
+      e.target.placeholder = fileName;
+      await axios.post('/rename', {fileName, oldFileName});
+    }
+  }
+
   async handleItemDelete(e) {
     const fileName = e.target.parentElement.getAttribute('href');
     const isDirectory = e.target.parentElement.getAttribute('data-isdirectory') === 'true' ? true : false;
@@ -201,7 +212,7 @@ class Files extends Component {
             {
               (this.state.isFileListLoading && !this.state.hasFileListLoaded) ?
                 <div className={'message-wrapper'}><p>loading...</p></div> :
-                renderFileList(this.state.files, this.state.selectedFileID, this.state.searchTerm, this.handleItemSelect.bind(this), this.targetElement, this.state.editModeEnabled, this.handleItemDelete.bind(this))
+                renderFileList(this.state.files, this.state.selectedFileID, this.state.searchTerm, this.targetElement, this.state.editModeEnabled, this.handleItemSelect.bind(this), this.handleItemRename.bind(this), this.handleItemDelete.bind(this))
             }
             {
               this.state.homePath !== this.state.directory ?
