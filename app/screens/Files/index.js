@@ -123,6 +123,7 @@ class Files extends Component {
       files: response.data.files,
       directory: response.data.newPath,
       selectedFileID: this.state.lastSelectedFileID,
+      lastSelectedFileID: null
     });
   }
 
@@ -180,7 +181,7 @@ class Files extends Component {
       e.target.setAttribute('data-oldvalue', fileName);
       e.target.value = null;
       e.target.placeholder = fileName;
-      await axios.post('/rename', {fileName, oldFileName});
+      await axios.post('/rename', {fileName: encodeURI(fileName), oldFileName});
       await this.getDirectory();
     }
   }
