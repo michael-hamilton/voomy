@@ -56,6 +56,7 @@ class Files extends Component {
       isTouchingPlayer: false,
       searchTerm: '',
       selectedFileID: null,
+      lastSelectedFileID: null,
       selectedFileURL: '#',
       editModeEnabled: false
     };
@@ -121,7 +122,7 @@ class Files extends Component {
       isFileListLoading: false,
       files: response.data.files,
       directory: response.data.newPath,
-      selectedFileID: null,
+      selectedFileID: this.state.lastSelectedFileID,
     });
   }
 
@@ -141,7 +142,7 @@ class Files extends Component {
   }
 
   playFile(selectedFileID, selectedFileURL) {
-    this.setState({selectedFileID, selectedFileURL});
+    this.setState({selectedFileID, selectedFileURL, lastSelectedFileID: null});
   }
 
   async updateHomePath() {
@@ -155,28 +156,32 @@ class Files extends Component {
 
   handleItemSelect(e) {
     e.preventDefault();
-    if (e.target.getAttribute('data-isdirectory') === 'true') {
-      this.setState({
-        directory: e.target.getAttribute('href'),
-        editModeEnabled: false
-      }, () => {
-        this.clearSearch();
-        this.getDirectory();
-      });
-    }
-    else {
-      this.playFile(e.target.getAttribute('data-index'), e.target.href)
+    if (!this.state.editModeEnabled) {
+      if (e.target.getAttribute('data-isdirectory') === 'true') {
+        this.setState({
+          directory: e.target.getAttribute('href'),
+          editModeEnabled: false,
+          lastSelectedFileID: this.state.selectedFileID,
+          selectedFileID: null
+        }, () => {
+          this.clearSearch();
+          this.getDirectory();
+        });
+      } else {
+        this.playFile(e.target.getAttribute('data-index'), e.target.href)
+      }
     }
   }
 
   async handleItemRename(e) {
     const fileName = e.target.value;
     const oldFileName = e.target.getAttribute('data-oldvalue');
-    if(fileName) {
+    if (fileName) {
       e.target.setAttribute('data-oldvalue', fileName);
       e.target.value = null;
       e.target.placeholder = fileName;
       await axios.post('/rename', {fileName, oldFileName});
+      await this.getDirectory();
     }
   }
 

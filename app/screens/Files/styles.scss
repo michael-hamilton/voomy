@@ -169,8 +169,10 @@
           font-family: Helvetica, sans-serif;
           font-size: 12px;
           font-weight: 200;
+          margin-right: 10px;
           outline-color: #1f80ee;
           padding: 10px;
+          width: 100%;
         }
 
         .delete-button {
@@ -265,6 +267,17 @@
       .list-item {
         a {
           font-size: 14px;
+
+          .list-item-edit {
+            border: none;
+            margin-right: 10px;
+            padding: 10px;
+          }
+
+          .delete-button {
+            margin: 0 4px 3px 0;
+            padding: 14px 14px;
+          }
         }
       }
     }
