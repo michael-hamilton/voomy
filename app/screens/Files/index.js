@@ -57,7 +57,7 @@ class Files extends Component {
       searchTerm: '',
       selectedFileID: null,
       selectedFileURL: '#',
-      editModeEnabled: true
+      editModeEnabled: false
     };
 
     this.pollInterval;
