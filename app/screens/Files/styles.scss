@@ -222,7 +222,7 @@
       }
 
       &.active {
-        background-color: #a560c1;
+        background-color: #6187cc;
 
         a {
           color: white;
@@ -262,6 +262,10 @@
     display: flex;
     flex: 2;
     justify-content: flex-start;
+
+    video {
+      outline: none;
+    }
   }
 
 }
