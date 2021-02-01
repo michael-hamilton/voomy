@@ -1,10 +1,11 @@
+// Vidserve
+
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const drivelist = require('drivelist');
 const express = require('express');
 const path = require('path');
 const fs = require('fs').promises;
-const { spawn } = require('child_process');
 const storage = require('node-persist');
 
 const app = express();
@@ -57,7 +58,9 @@ const app = express();
       items = items.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item.name));
 
       const files = items.map((item,index) => {
-        return {name: item.name, isDirectory: item.isDirectory(), file: encodeURI(item.name), path: `${newPath}/${item.name}`};
+        const extension = path.extname(item.name);
+        const basename = path.basename(item.name, extension);
+        return {name: item.name, basename, extension, isDirectory: item.isDirectory(), file: encodeURI(item.name), path: `${newPath}/${item.name}`};
       });
 
       res.send({files, newPath, status: 'ok'});
@@ -104,8 +107,9 @@ const app = express();
   });
 
   app.post('/rename', async (req, res, next) => {
-    console.log(dir);
-    await fs.rename(decodeURI(`${dir}/${req.body.oldFileName}`), decodeURI(`${dir}/${req.body.fileName}`));
+    const extension = path.extname(decodeURI(req.body.oldFileName));
+    const basename = path.basename(decodeURI(req.body.fileName), extension);
+    await fs.rename(decodeURI(`${req.body.oldFileName}`), decodeURI(`${dir}/${basename}${extension}`));
     res.send('ok');
   });
 
