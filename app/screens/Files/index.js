@@ -54,7 +54,7 @@ const FileListItem = (props) => {
         { props.isEditMode ? <input className={'list-item-edit'} onChange={(e) => setFileName(e.target.value)} onBlur={props.handleChange} data-oldvalue={props.name} value={fileName} />: <span className={'list-item-title'}>{fileName}</span> }
         {
           props.isDirectory ?
-            <span className={'directoryIcon'}>&#8627;</span> :
+            <span className={'directoryIcon'}>&#x1F4C1;</span> :
             null
         }
       </a>

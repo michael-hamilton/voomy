@@ -39,12 +39,14 @@
       .edit-mode-button {
         background-color: transparent;
         border: none;
-        color: gray;
+        color: #cccccc;
         outline: none;
-        padding: 14px;
+        padding: 14px 14px 15px 14px;
+        -webkit-user-select: none;
 
         &.active {
-          color: white;
+          background-color: white;
+          color: #373737;
         }
       }
 
@@ -170,7 +172,7 @@
           font-size: 12px;
           font-weight: 200;
           margin-right: 10px;
-          outline-color: #1f80ee;
+          outline-color: #408892;
           padding: 10px;
           width: 100%;
         }
@@ -182,9 +184,15 @@
           color: tomato;
           display: flex;
           justify-content: center;
-          margin: 0 4px 1px 0;
+          margin-right: 5px;
           outline: none;
-          padding: 14px 14px;
+          padding: 15px;
+          -webkit-user-select: none;
+
+          &:hover {
+            background-color: tomato;
+            color: white;
+          }
         }
 
         .list-item-title {
@@ -202,6 +210,7 @@
           vertical-align: middle;
           user-select: none;
           width: 20px;
+          -webkit-user-select: none;
         }
       }
 
@@ -210,7 +219,7 @@
       }
 
       &.active {
-        background-color: #1e5b30;
+        background-color: #a560c1;
 
         a {
           color: white;
@@ -235,8 +244,9 @@
     &.edit-mode {
       .list-item {
         a {
+          padding-bottom: 1px;
           .list-item-title {
-            padding: 15px 0;
+            padding: 28px 0;
           }
         }
       }
