@@ -51,7 +51,7 @@ const FileListItem = (props) => {
     >
       <a data-index={props.index} data-isdirectory={props.isDirectory} href={props.isDirectory ? props.path : props.file} onClick={props.handleClick}>
         { props.isEditMode ? <button className={'delete-button'} onClick={props.handleDelete}>x</button> : null }
-        { props.isEditMode ? <input className={'list-item-edit'} onChange={(e) => setFileName(e.target.value)} onBlur={props.handleChange} data-oldvalue={props.name} value={fileName} />: <span className={'list-item-title'}>{fileName}</span> }
+        { props.isEditMode ? <input className={'list-item-edit'} onChange={(e) => setFileName(e.target.value)} onBlur={props.handleChange} data-oldvalue={props.name} value={fileName} />: <span className={'list-item-title'}>{props.name}</span> }
         {
           props.isDirectory ?
             <span className={'directoryIcon'}>&#x1F4C1;</span> :
