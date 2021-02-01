@@ -15,20 +15,19 @@ const renderFileList = (files, selectedID, searchTerm, targetRef, isEditMode, ha
               .indexOf(searchTerm.toLowerCase())
             !== -1
           ).map((file, index) => (
-            <li
+            <FileListItem
               key={index}
-              className={`list-item ${selectedID == index ? 'active' : ''}`}
-            >
-              <a data-index={index} data-isdirectory={file.isDirectory} href={file.isDirectory ? file.path : file.file} onClick={handleClick}>
-                { isEditMode ? <button className={'delete-button'} onClick={handleDelete}>x</button> : null }
-                { isEditMode ? <input className={'list-item-edit'} onBlur={handleChange} data-oldvalue={file.name} placeholder={file.name} />: <span className={'list-item-title'}>{file.name}</span> }
-                {
-                  file.isDirectory ?
-                    <span className={'directoryIcon'}>&#8627;</span> :
-                    null
-                }
-              </a>
-            </li>
+              index={index}
+              isDirectory={file.isDirectory}
+              file={file.file}
+              name={file.name}
+              path={file.path}
+              isEditMode={isEditMode}
+              isSelected={selectedID == index}
+              handleClick={handleClick}
+              handleChange={handleChange}
+              handleDelete={handleDelete}
+            />
           ))
         }
       </ul>
@@ -42,6 +41,26 @@ const renderFileList = (files, selectedID, searchTerm, targetRef, isEditMode, ha
     );
   }
 };
+
+const FileListItem = (props) => {
+  const [fileName, setFileName] = useState(props.name);
+
+  return (
+    <li
+      className={`list-item ${props.isSelected ? 'active' : ''}`}
+    >
+      <a data-index={props.index} data-isdirectory={props.isDirectory} href={props.isDirectory ? props.path : props.file} onClick={props.handleClick}>
+        { props.isEditMode ? <button className={'delete-button'} onClick={props.handleDelete}>x</button> : null }
+        { props.isEditMode ? <input className={'list-item-edit'} onChange={(e) => setFileName(e.target.value)} onBlur={props.handleChange} data-oldvalue={props.name} value={fileName} />: <span className={'list-item-title'}>{fileName}</span> }
+        {
+          props.isDirectory ?
+            <span className={'directoryIcon'}>&#8627;</span> :
+            null
+        }
+      </a>
+    </li>
+  );
+}
 
 class Files extends Component {
   constructor(props) {
