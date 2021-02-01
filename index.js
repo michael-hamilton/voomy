@@ -13,6 +13,7 @@ const app = express();
   await storage.init({dir: 'APPDATA'});
 
   let HOME_PATH = await storage.getItem('HOME_PATH') || '/';
+  let dir = '';
 
   app.use(express.static(`${__dirname}/dist`));
   app.use(cors());
@@ -22,6 +23,7 @@ const app = express();
     let st = express.static(path)
     let dyn = (req, res, next) => st(req, res, next);
     dyn.setPath = (newPath) => {
+      dir = newPath;
       st = express.static(newPath);
     }
     return dyn;
@@ -102,7 +104,8 @@ const app = express();
   });
 
   app.post('/rename', async (req, res, next) => {
-    await fs.rename(decodeURI(`${HOME_PATH}/${req.body.oldFileName}`), decodeURI(`${HOME_PATH}/${req.body.fileName}`));
+    console.log(dir);
+    await fs.rename(decodeURI(`${dir}/${req.body.oldFileName}`), decodeURI(`${dir}/${req.body.fileName}`));
     res.send('ok');
   });
 

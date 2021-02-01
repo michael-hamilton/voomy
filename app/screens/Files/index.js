@@ -16,7 +16,7 @@ const renderFileList = (files, selectedID, searchTerm, targetRef, isEditMode, ha
             !== -1
           ).map((file, index) => (
             <FileListItem
-              key={index}
+              key={file.name}
               index={index}
               isDirectory={file.isDirectory}
               file={file.file}
@@ -200,7 +200,7 @@ class Files extends Component {
       e.target.setAttribute('data-oldvalue', fileName);
       e.target.value = null;
       e.target.placeholder = fileName;
-      await axios.post('/rename', {fileName: encodeURI(fileName), oldFileName});
+      await axios.post('/rename', {fileName: encodeURI(fileName), oldFileName: encodeURI(oldFileName)});
       await this.getDirectory();
     }
   }
