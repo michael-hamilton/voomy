@@ -1,6 +1,6 @@
 {
   "name": "vidserve",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "main": "index.js",
   "repository": "https://github.com/michael-hamilton/vidserve.git",
   "author": "Michael Hamilton <michaelhamilton626@gmail.com>",
@@ -13,6 +13,7 @@
     "drivelist": "^9.1.0",
     "express": "^4.17.1",
     "node-persist": "^3.1.0",
+    "package.json": "^2.0.1",
     "pm2": "^4.5.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",

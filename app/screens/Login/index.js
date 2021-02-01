@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import axios from "axios";
+import {version} from "../../../package.json";
 import './styles.scss';
 
 class Login extends Component {
@@ -48,6 +49,7 @@ class Login extends Component {
               <button type={'submit'}>login</button>
             </div>
           </form>
+          <p className={'version'}>version {version}</p>
         </div>
       </div>
     );
