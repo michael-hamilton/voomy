@@ -1,4 +1,4 @@
-# vidserve
+# voomy
 A simple personal media management platform.
 
 

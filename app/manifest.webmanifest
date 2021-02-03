@@ -1,7 +1,7 @@
 {
-    "short_name": "vidserve",
-    "name": "vidserve",
-    "description": "vidserve",
+    "short_name": "voomy",
+    "name": "voomy",
+    "description": "voomy",
     "icons": [{
 	    "src": "./assets/images/play48.png",
 	    "sizes": "48x48",
