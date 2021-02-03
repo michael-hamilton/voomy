@@ -26,7 +26,7 @@ class App extends Component {
           {
             this.state.isLoggedIn ?
               <div className={'header'}>
-                <h1>vidserve</h1>
+                <h1>voomy</h1>
                 <div className={'nav'}>
                   <NavLink exact to={'/'}>files</NavLink>
                   <NavLink exact to={'/config'}>config</NavLink>

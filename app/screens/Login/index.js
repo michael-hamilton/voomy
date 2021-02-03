@@ -31,7 +31,7 @@ class Login extends Component {
     return (
       <div className={'login-container'}>
         <div className={'login-form-wrapper'}>
-          <h1 className={'login-heading'}>vidserve</h1>
+          <h1 className={'login-heading'}>voomy</h1>
           <form
             className={'form'}
             onSubmit={(e) => this.login(e)}
