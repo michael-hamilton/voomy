@@ -76,6 +76,8 @@ class Files extends Component {
       searchTerm: '',
       selectedFileID: null,
       lastSelectedFileID: null,
+      lastDirID: null,
+      fileListPreSearchOffset: null,
       selectedFileURL: '#',
       editModeEnabled: false
     };
@@ -136,18 +138,35 @@ class Files extends Component {
     }
 
     const response = await axios.get(`/directory${query}`);
+    const lastDirID = this.state.lastDirID;
 
     this.setState({
       isFileListLoading: false,
       files: response.data.files,
       directory: response.data.newPath,
       selectedFileID: this.state.lastSelectedFileID,
-      lastSelectedFileID: null
+      lastSelectedFileID: null,
+      lastDirID: null,
     });
+
+    const activeItemY = document.querySelector(`[data-index="${lastDirID}"]`).closest('li').offsetTop;
+
+    document.querySelector('.filelist').scrollTo(0, activeItemY);
   }
 
   handleSearch(e) {
-    this.setState({searchTerm: e.target.value});
+    if (!this.state.fileListPreSearchOffset) {
+      this.setState({
+        fileListPreSearchOffset: document.querySelector('.filelist').scrollTop
+      })
+    }
+
+    this.setState({searchTerm: e.target.value}, () => {
+      if(!this.state.searchTerm) {
+        document.querySelector('.filelist').scrollTo(0, this.state.fileListPreSearchOffset);
+        this.setState({fileListPreSearchOffset: null});
+      }
+    });
   }
 
   handlePlayerTouch(isTouchingPlayer) {
@@ -182,7 +201,8 @@ class Files extends Component {
           directory: e.target.getAttribute('href'),
           editModeEnabled: false,
           lastSelectedFileID: this.state.selectedFileID,
-          selectedFileID: null
+          selectedFileID: null,
+          lastDirID: e.target.getAttribute('data-index'),
         }, () => {
           this.clearSearch();
           this.getDirectory();
