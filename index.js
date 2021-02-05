@@ -7,6 +7,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs').promises;
 const storage = require('node-persist');
+const serveStatic = require('serve-static')
 
 const app = express();
 
@@ -21,11 +22,11 @@ const app = express();
   app.use(bodyParser.json());
 
   const createDynStatic = (path) => {
-    let st = express.static(path)
+    let st = serveStatic(path);
     let dyn = (req, res, next) => st(req, res, next);
     dyn.setPath = (newPath) => {
       dir = newPath;
-      st = express.static(newPath);
+      st = serveStatic(newPath);
     }
     return dyn;
   }
@@ -54,9 +55,6 @@ const app = express();
       const relativePath = path.relative(HOME_PATH, newPath);
 
       let items = await fs.readdir(newPath, {withFileTypes: true});
-
-      console.log(items);
-
       items = items.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item.name));
 
       const files = items.map((item,index) => {
