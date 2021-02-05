@@ -76,8 +76,7 @@ class Files extends Component {
       searchTerm: '',
       selectedFileID: null,
       lastSelectedFileID: null,
-      lastDirID: null,
-      fileListPreSearchOffset: null,
+      fileListLastYOffset: null,
       selectedFileURL: '#',
       editModeEnabled: false
     };
@@ -138,7 +137,6 @@ class Files extends Component {
     }
 
     const response = await axios.get(`/directory${query}`);
-    const lastDirID = this.state.lastDirID;
 
     this.setState({
       isFileListLoading: false,
@@ -146,25 +144,27 @@ class Files extends Component {
       directory: response.data.newPath,
       selectedFileID: this.state.lastSelectedFileID,
       lastSelectedFileID: null,
-      lastDirID: null,
+    }, () => {
+      this.clearSearch();
+      document.querySelector('.filelist').scrollTo(0, this.state.fileListLastYOffset);
     });
-
-    const activeItemY = document.querySelector(`[data-index="${lastDirID}"]`).closest('li').offsetTop;
-
-    document.querySelector('.filelist').scrollTo(0, activeItemY);
   }
 
   handleSearch(e) {
-    if (!this.state.fileListPreSearchOffset) {
-      this.setState({
-        fileListPreSearchOffset: document.querySelector('.filelist').scrollTop
-      })
+    if (!this.state.fileListLastYOffset) {
+      if (document.querySelector('.filelist')) {
+        this.setState({
+          fileListLastYOffset: document.querySelector('.filelist').scrollTop
+        })
+      }
     }
 
     this.setState({searchTerm: e.target.value}, () => {
-      if(!this.state.searchTerm) {
-        document.querySelector('.filelist').scrollTo(0, this.state.fileListPreSearchOffset);
-        this.setState({fileListPreSearchOffset: null});
+      if (!this.state.searchTerm) {
+        if (document.querySelector('.filelist')) {
+          document.querySelector('.filelist').scrollTo(0, this.state.fileListLastYOffset);
+        }
+        this.setState({fileListLastYOffset: null});
       }
     });
   }
@@ -189,10 +189,14 @@ class Files extends Component {
     this.setState({homePath: response.data});
   }
 
-  clearSearch() {
+  clearSearch(clearOffset = true) {
     this.setState({searchTerm: ''}, () => {
-      document.querySelector('.filelist').scrollTo(0, this.state.fileListPreSearchOffset);
-      this.setState({fileListPreSearchOffset: null});
+      if (document.querySelector('.filelist')) {
+        document.querySelector('.filelist').scrollTo(0, this.state.fileListLastYOffset);
+      }
+      if (clearOffset) {
+        this.setState({fileListLastYOffset: null});
+      }
     });
   }
 
@@ -205,9 +209,9 @@ class Files extends Component {
           editModeEnabled: false,
           lastSelectedFileID: this.state.selectedFileID,
           selectedFileID: null,
-          lastDirID: e.target.getAttribute('data-index'),
+          fileListLastYOffset: document.querySelector('.filelist').scrollTop,
         }, () => {
-          this.clearSearch();
+          this.clearSearch(false);
           this.getDirectory();
         });
       } else {
