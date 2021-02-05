@@ -5,6 +5,7 @@ import {
   Route,
   NavLink,
 } from 'react-router-dom';
+import { BiCog, BiFilm } from 'react-icons/bi';
 import Config from './screens/Config';
 import Files from './screens/Files';
 import Login from './screens/Login';
@@ -28,8 +29,8 @@ class App extends Component {
               <div className={'header'}>
                 <h1>voomy</h1>
                 <div className={'nav'}>
-                  <NavLink exact to={'/'}>files</NavLink>
-                  <NavLink exact to={'/config'}>config</NavLink>
+                  <NavLink exact to={'/'}><BiFilm /></NavLink>
+                  <NavLink exact to={'/config'}><BiCog /></NavLink>
                 </div>
               </div> :
               null

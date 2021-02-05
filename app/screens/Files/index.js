@@ -2,41 +2,55 @@ import React, {Component, createRef, useState} from 'react';
 import axios from 'axios';
 import ReactPlayer from 'react-player';
 import { disableBodyScroll, enableBodyScroll, clearAllBodyScrollLocks } from 'body-scroll-lock';
+import { BiSubdirectoryLeft, BiTrash, BiArrowToLeft, BiEdit, BiFolder } from 'react-icons/bi';
 import './styles.scss';
 
 const renderFileList = (files, selectedID, searchTerm, targetRef, isEditMode, handleClick, handleChange, handleDelete) => {
   if (files.length) {
-    return (
-      <ul ref={targetRef} className={`filelist ${isEditMode ? 'edit-mode' : ''}`}>
-        {
-          files.filter(file =>
-            decodeURI(file.name.toString())
-              .toLowerCase()
-              .indexOf(searchTerm.toLowerCase())
-            !== -1
-          ).map((file, index) => (
+    const filteredFiles = files.filter(file =>
+      decodeURI(file.name.toString())
+        .toLowerCase()
+        .indexOf(searchTerm.toLowerCase())
+      !== -1
+    );
+
+    if (filteredFiles.length) {
+      return (
+        <ul ref={targetRef} className={`filelist ${isEditMode ? 'edit-mode' : ''}`}>
+          {
+            filteredFiles.map((file, index) => (
             <FileListItem
-              key={file.name}
-              index={index}
-              isDirectory={file.isDirectory}
-              file={file.file}
-              name={file.basename}
-              path={file.path}
-              isEditMode={isEditMode}
-              isSelected={selectedID == index}
-              handleClick={handleClick}
-              handleChange={handleChange}
-              handleDelete={handleDelete}
+            key={file.name}
+            index={index}
+            isDirectory={file.isDirectory}
+            file={file.file}
+            name={file.basename}
+            path={file.path}
+            isEditMode={isEditMode}
+            isSelected={selectedID == index}
+            handleClick={handleClick}
+            handleChange={handleChange}
+            handleDelete={handleDelete}
             />
-          ))
-        }
-      </ul>
-    )
+            ))
+          }
+        </ul>
+      )
+    }
+    else {
+      return (
+        <div className={'message-wrapper'}>
+          <p>no files found</p>
+          <p><small>try searching for something else</small></p>
+        </div>
+      );
+    }
   }
   else {
     return (
       <div className={'message-wrapper'}>
-        <p>no files</p>
+        <p>no files found</p>
+        <p><small>try looking in a different folder</small></p>
       </div>
     );
   }
@@ -50,11 +64,11 @@ const FileListItem = (props) => {
       className={`list-item ${props.isSelected ? 'active' : ''}`}
     >
       <a data-index={props.index} data-isdirectory={props.isDirectory} href={props.isDirectory ? props.path : props.file} onClick={props.handleClick}>
-        { props.isEditMode ? <button className={'delete-button'} onClick={props.handleDelete}>x</button> : null }
+        { props.isEditMode ? <button className={'delete-button'} onClick={props.handleDelete}><BiTrash /></button> : null }
         { props.isEditMode ? <input className={'list-item-edit'} onChange={(e) => setFileName(e.target.value)} onBlur={props.handleChange} data-oldvalue={props.path} value={fileName} />: <span className={'list-item-title'}>{props.name}</span> }
         {
           props.isDirectory ?
-            <span className={'directoryIcon'}>&#x1F4C1;</span> :
+            <BiFolder className={'directoryIcon'} /> :
             null
         }
       </a>
@@ -146,7 +160,9 @@ class Files extends Component {
       lastSelectedFileID: null,
     }, () => {
       this.clearSearch();
-      document.querySelector('.filelist').scrollTo(0, this.state.fileListLastYOffset);
+      if (document.querySelector('.filelist')) {
+        document.querySelector('.filelist').scrollTo(0, this.state.fileListLastYOffset);
+      }
     });
   }
 
@@ -247,13 +263,13 @@ class Files extends Component {
         <div className={'list'}>
           <div className={'list-header'}>
             <h2>files&nbsp;<small>({this.state.files.length})</small></h2>
-            <button className={`edit-mode-button ${this.state.editModeEnabled ? 'active' : ''}`} onClick={() => this.setState({editModeEnabled: !this.state.editModeEnabled})}>✎</button>
+            <button className={`edit-mode-button ${this.state.editModeEnabled ? 'active' : ''}`} onClick={() => this.setState({editModeEnabled: !this.state.editModeEnabled})}><BiEdit /></button>
             <div className={'search-wrapper'}>
               <input type={'text'} placeholder={'search...'} value={this.state.searchTerm} onChange={(e) => this.handleSearch(e)} />
               {
                 this.state.searchTerm ?
                   <button className={'clear-search'} onClick={() => this.clearSearch()}>
-                    x
+                    <BiArrowToLeft />
                   </button> :
                   null
               }
@@ -268,7 +284,7 @@ class Files extends Component {
             }
             {
               this.state.homePath !== this.state.directory ?
-                <button className={'up-dir-button'} onClick={() => this.upDirectory()}>&#8624;</button> :
+                <button className={'up-dir-button'} onClick={() => this.upDirectory()}><BiSubdirectoryLeft /></button> :
                 null
             }
           </div>

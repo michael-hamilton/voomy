@@ -60,7 +60,7 @@
           border-radius: 0;
           color: white;
           flex: 1;
-          font-family: Helvetica, sans-serif;
+          font-family: Nunito, sans-serif;
           font-size: 12px;
           font-weight: 300;
           padding: 15px;
@@ -80,14 +80,15 @@
           background-color: transparent;
           border: none;
           color: #cccccc;
-          font-family: Helvetica, sans-serif;
-          font-size: 14px;
+          font-family: Nunito, sans-serif;
+          font-size: 18px;
           font-weight: 500;
           height: 100%;
-          width: 30px;
           right: 0;
+          padding-top: 4px;
           position: absolute;
           transition: 0.125s;
+          width: 30px;
 
           &:hover {
             color: white;
@@ -113,8 +114,9 @@
         border: none;
         bottom: 0;
         color: white;
+        font-size: 20px;
         margin-right: 10px;
-        padding: 30px 30px calc(env(safe-area-inset-bottom) + 20px) 30px;
+        padding: 26px 30px calc(env(safe-area-inset-bottom) + 20px) 30px;
         position: absolute;
         transition: 0.125s;
         width: 100%;
@@ -137,9 +139,14 @@
         align-items: center;
         display: flex;
         flex: 1;
+        flex-direction: column;
         justify-content: center;
         padding-bottom: 75px;
         width: 100%;
+
+        p {
+          text-align: center;
+        }
       }
     }
   }
@@ -170,7 +177,7 @@
 
         .list-item-edit {
           border: none;
-          font-family: Helvetica, sans-serif;
+          font-family: Nunito, sans-serif;
           font-size: 12px;
           font-weight: 200;
           margin-right: 10px;
@@ -185,10 +192,11 @@
           border: none;
           color: tomato;
           display: flex;
+          font-size: 24px;
           justify-content: center;
           margin-right: 5px;
           outline: none;
-          padding: 15px;
+          padding: 10px 10px 9px 10px;
           -webkit-user-select: none;
 
           &:hover {
@@ -205,6 +213,7 @@
         .directoryIcon {
           align-items: center;
           color: #373737;
+          pointer-events: none;
           display: flex;
           height: 20px;
           position: absolute;
