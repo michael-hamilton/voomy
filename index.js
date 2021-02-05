@@ -51,7 +51,7 @@ const app = express();
       const up = req.query.up ? '..' : '';
       const tmpPath = req.query.path ? req.query.path : HOME_PATH;
       const newPath = path.resolve(`${tmpPath}/${up}`);
-      // dyn.setPath(newPath);
+      const relativePath = path.relative(HOME_PATH, newPath);
 
       let items = await fs.readdir(newPath, {withFileTypes: true});
 
@@ -60,7 +60,7 @@ const app = express();
       const files = items.map((item,index) => {
         const extension = path.extname(item.name);
         const basename = path.basename(item.name, extension);
-        return {name: item.name, basename, extension, isDirectory: item.isDirectory(), file: encodeURI(item.name), path: encodeURI(`${newPath}/${item.name}`)};
+        return {name: item.name, basename, extension, relativePath, isDirectory: item.isDirectory(), file: encodeURI(item.name), path: encodeURI(`${newPath}/${item.name}`)};
       });
 
       res.send({files, newPath, status: 'ok'});

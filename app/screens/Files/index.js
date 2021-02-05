@@ -26,6 +26,7 @@ const renderFileList = (files, selectedID, searchTerm, targetRef, isEditMode, ha
             file={file.file}
             name={file.basename}
             path={file.path}
+            relativePath={file.relativePath}
             isEditMode={isEditMode}
             isSelected={selectedID == index}
             handleClick={handleClick}
@@ -63,7 +64,7 @@ const FileListItem = (props) => {
     <li
       className={`list-item ${props.isSelected ? 'active' : ''}`}
     >
-      <a data-index={props.index} data-isdirectory={props.isDirectory} href={props.isDirectory ? props.path : props.file} onClick={props.handleClick}>
+      <a data-index={props.index} data-isdirectory={props.isDirectory} href={props.isDirectory ? props.path : `${props.relativePath}/${props.file}`} onClick={props.handleClick}>
         { props.isEditMode ? <button className={'delete-button'} onClick={props.handleDelete}><BiTrash /></button> : null }
         { props.isEditMode ? <input className={'list-item-edit'} onChange={(e) => setFileName(e.target.value)} onBlur={props.handleChange} data-oldvalue={props.path} value={fileName} />: <span className={'list-item-title'}>{props.name}</span> }
         {
