@@ -55,6 +55,8 @@ const app = express();
 
       let items = await fs.readdir(newPath, {withFileTypes: true});
 
+      console.log(items);
+
       items = items.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item.name));
 
       const files = items.map((item,index) => {
