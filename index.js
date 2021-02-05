@@ -60,7 +60,7 @@ const app = express();
       const files = items.map((item,index) => {
         const extension = path.extname(item.name);
         const basename = path.basename(item.name, extension);
-        return {name: item.name, basename, extension, isDirectory: item.isDirectory(), file: encodeURI(item.name), path: `${newPath}/${item.name}`};
+        return {name: item.name, basename, extension, isDirectory: item.isDirectory(), file: encodeURI(item.name), path: encodeURI(`${newPath}/${item.name}`)};
       });
 
       res.send({files, newPath, status: 'ok'});
