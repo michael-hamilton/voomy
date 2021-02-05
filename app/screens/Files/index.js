@@ -190,7 +190,10 @@ class Files extends Component {
   }
 
   clearSearch() {
-    this.setState({searchTerm: ''});
+    this.setState({searchTerm: ''}, () => {
+      document.querySelector('.filelist').scrollTo(0, this.state.fileListPreSearchOffset);
+      this.setState({fileListPreSearchOffset: null});
+    });
   }
 
   handleItemSelect(e) {
