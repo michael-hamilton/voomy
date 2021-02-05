@@ -51,7 +51,7 @@ const app = express();
       const up = req.query.up ? '..' : '';
       const tmpPath = req.query.path ? req.query.path : HOME_PATH;
       const newPath = path.resolve(`${tmpPath}/${up}`);
-      dyn.setPath(newPath);
+      // dyn.setPath(newPath);
 
       let items = await fs.readdir(newPath, {withFileTypes: true});
 
