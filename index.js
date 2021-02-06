@@ -51,9 +51,10 @@ const app = express();
     try {
       const up = req.query.up ? '..' : '';
       const tmpPath = req.query.path ? req.query.path : HOME_PATH;
-      const newPath = path.resolve(`${tmpPath}/${up}`);
-      const relativePath = path.relative(HOME_PATH, newPath);
+      const newPath = path.resolve(`${HOME_PATH}/${up}`);
+      const relativePath = path.relative(newPath, HOME_PATH);
 
+      console.log(relativePath);
       let items = await fs.readdir(newPath, {withFileTypes: true});
       items = items.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item.name));
 
