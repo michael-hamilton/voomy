@@ -21,39 +21,44 @@ class App extends Component {
   }
 
   render() {
-    return (
-      <Router>
-        <div className={'app-container'}>
-          {
-            this.state.isLoggedIn ?
-              <div className={'header'}>
-                <h1>voomy</h1>
-                <div className={'nav'}>
-                  <NavLink exact to={'/'}><BiFilm /></NavLink>
-                  <NavLink exact to={'/config'}><BiCog /></NavLink>
-                </div>
-              </div> :
-              null
-          }
-          <Switch>
-            <Route path={'/config'}>
-              {
-                this.state.isLoggedIn ?
-                  <Config/> :
-                  <Login login={() => this.setState({isLoggedIn: true})} />
-              }
-            </Route>
-            <Route path={'/'}>
-              {
-                this.state.isLoggedIn ?
-                  <Files/> :
-                  <Login login={() => this.setState({isLoggedIn: true})} />
-              }
-            </Route>
-          </Switch>
-        </div>
-      </Router>
-    );
+    const api_regex = /^\/public\/.*/
+    if (api_regex.test(window.location.pathname)) {
+      return <div /> // must return at least an empty div
+    } else {
+      return (
+        <Router>
+          <div className={'app-container'}>
+            {
+              this.state.isLoggedIn ?
+                <div className={'header'}>
+                  <h1>voomy</h1>
+                  <div className={'nav'}>
+                    <NavLink exact to={'/'}><BiFilm/></NavLink>
+                    <NavLink exact to={'/config'}><BiCog/></NavLink>
+                  </div>
+                </div> :
+                null
+            }
+            <Switch>
+              <Route path={'/config'}>
+                {
+                  this.state.isLoggedIn ?
+                    <Config/> :
+                    <Login login={() => this.setState({isLoggedIn: true})}/>
+                }
+              </Route>
+              <Route path={'/'}>
+                {
+                  this.state.isLoggedIn ?
+                    <Files/> :
+                    <Login login={() => this.setState({isLoggedIn: true})}/>
+                }
+              </Route>
+            </Switch>
+          </div>
+        </Router>
+      );
+    }
   }
 }
 

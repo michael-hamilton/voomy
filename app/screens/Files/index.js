@@ -26,7 +26,6 @@ const renderFileList = (files, selectedID, searchTerm, targetRef, isEditMode, ha
             file={file.file}
             name={file.basename}
             path={file.path}
-            relativePath={file.relativePath}
             isEditMode={isEditMode}
             isSelected={selectedID == index}
             handleClick={handleClick}
@@ -64,7 +63,7 @@ const FileListItem = (props) => {
     <li
       className={`list-item ${props.isSelected ? 'active' : ''}`}
     >
-      <a data-index={props.index} data-isdirectory={props.isDirectory} href={`${props.relativePath}/${props.file}`} onClick={props.handleClick}>
+      <a data-index={props.index} data-isdirectory={props.isDirectory} href={props.path} onClick={props.handleClick}>
         { props.isEditMode ? <button className={'delete-button'} onClick={props.handleDelete}><BiTrash /></button> : null }
         { props.isEditMode ? <input className={'list-item-edit'} onChange={(e) => setFileName(e.target.value)} onBlur={props.handleChange} data-oldvalue={props.path} value={fileName} />: <span className={'list-item-title'}>{props.name}</span> }
         {
@@ -83,11 +82,11 @@ class Files extends Component {
 
     this.state = {
       directory: '',
-      homePath: '',
       files: [],
       hasFileListLoaded: false,
       isFileListLoading: false,
       isTouchingPlayer: false,
+      isRoot: false,
       searchTerm: '',
       selectedFileID: null,
       lastSelectedFileID: null,
@@ -102,7 +101,6 @@ class Files extends Component {
 
   componentDidMount() {
     this.getDirectory();
-    this.updateHomePath();
 
     this.pollInterval = setInterval(() => this.getDirectory(), 5000);
   }
@@ -112,22 +110,36 @@ class Files extends Component {
     clearInterval(this.pollInterval);
   }
 
-  async getDirectory() {
+  async getDirectory(goUp = false) {
     this.setState({isFileListLoading: true});
 
     let query = '';
-    if (this.state.directory) {
-      query = `?path=${encodeURI(this.state.directory)}`;
+    if (!this.state.isRoot && goUp) {
+      query = `&up=true`;
     }
 
-    const response = await axios.get(`/directory${query}`);
+    console.log(this.state.directory);
+
+    const response = await axios.get(`/public?path=${encodeURI(this.state.directory)}${query}`);
+
+    console.log(response.data);
 
     if (response.data.status === 'ok') {
       this.setState({
         hasFileListLoaded: true,
         isFileListLoading: false,
         files: response.data.files,
-        directory: response.data.newPath
+        isRoot: response.data.isRoot,
+        selectedFileID: this.state.lastSelectedFileID,
+        lastSelectedFileID: null,
+        directory: response.data.currentPath
+      }, () => {
+        if(goUp) {
+          this.clearSearch();
+          if (document.querySelector('.filelist')) {
+            document.querySelector('.filelist').scrollTo(0, this.state.fileListLastYOffset);
+          }
+        }
       });
 
       if (response.data.files && !this.state.isTouchingPlayer) {
@@ -143,29 +155,28 @@ class Files extends Component {
     }
   }
 
-  async upDirectory() {
-    this.setState({isFileListLoading: true});
-
-    let query = '';
-    if (this.state.directory) {
-      query = `?path=${encodeURI(this.state.directory)}&up=true`;
-    }
-
-    const response = await axios.get(`/directory${query}`);
-
-    this.setState({
-      isFileListLoading: false,
-      files: response.data.files,
-      directory: response.data.newPath,
-      selectedFileID: this.state.lastSelectedFileID,
-      lastSelectedFileID: null,
-    }, () => {
-      this.clearSearch();
-      if (document.querySelector('.filelist')) {
-        document.querySelector('.filelist').scrollTo(0, this.state.fileListLastYOffset);
-      }
-    });
-  }
+  // async upDirectory() {
+  //   this.setState({isFileListLoading: true});
+  //
+  //   let query = '';
+  //   if (!this.state.isRoot) {
+  //     query = `?up=true`;
+  //   }
+  //
+  //   const response = await axios.get(`/public/${encodeURI(this.state.directory)}${query}`);
+  //
+  //   this.setState({
+  //     isFileListLoading: false,
+  //     files: response.data.files,
+  //     selectedFileID: this.state.lastSelectedFileID,
+  //     lastSelectedFileID: null,
+  //   }, () => {
+  //     this.clearSearch();
+  //     if (document.querySelector('.filelist')) {
+  //       document.querySelector('.filelist').scrollTo(0, this.state.fileListLastYOffset);
+  //     }
+  //   });
+  // }
 
   handleSearch(e) {
     if (!this.state.fileListLastYOffset) {
@@ -199,11 +210,6 @@ class Files extends Component {
 
   playFile(selectedFileID, selectedFileURL) {
     this.setState({selectedFileID, selectedFileURL, lastSelectedFileID: null});
-  }
-
-  async updateHomePath() {
-    const response = await axios.get('/homepath');
-    this.setState({homePath: response.data});
   }
 
   clearSearch(clearOffset = true) {
@@ -284,8 +290,8 @@ class Files extends Component {
                 renderFileList(this.state.files, this.state.selectedFileID, this.state.searchTerm, this.targetElement, this.state.editModeEnabled, this.handleItemSelect.bind(this), this.handleItemRename.bind(this), this.handleItemDelete.bind(this))
             }
             {
-              this.state.homePath !== this.state.directory ?
-                <button className={'up-dir-button'} onClick={() => this.upDirectory()}><BiSubdirectoryLeft /></button> :
+              !this.state.isRoot ?
+                <button className={'up-dir-button'} onClick={() => this.getDirectory(true)}><BiSubdirectoryLeft /></button> :
                 null
             }
           </div>

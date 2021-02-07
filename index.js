@@ -22,17 +22,17 @@ const app = express();
   app.use(bodyParser.json());
 
   const createDynStatic = (path) => {
-    let st = serveStatic(path);
+    let st = serveStatic(path, {index: false});
     let dyn = (req, res, next) => st(req, res, next);
     dyn.setPath = (newPath) => {
       dir = newPath;
-      st = serveStatic(newPath);
+      st = serveStatic(newPath, {index: false});
     }
     return dyn;
   }
 
-  const dyn = createDynStatic(HOME_PATH);
-  app.use(dyn);
+  const dyn = serveStatic(HOME_PATH, {index: false});
+  app.use('/public', dyn);
 
   app.get('/', async (req, res, next) => {
     res.sendFile(`${__dirname}/dist/index.html`);
@@ -47,24 +47,27 @@ const app = express();
     }
   });
 
-  app.get('/directory', async (req, res, next) => {
+  app.get('/public', async (req, res, next) => {
     try {
       const up = req.query.up ? '..' : '';
-      const tmpPath = req.query.path ? req.query.path : HOME_PATH;
-      const newPath = path.resolve(`${HOME_PATH}/${up}`);
-      const relativePath = path.relative(newPath, HOME_PATH);
+      const currentPath = req.query.path || '';
+      const newPath = path.resolve(`${HOME_PATH}/${currentPath}/${up}`);
+      const newRelativePath = `${path.normalize(currentPath, '/', up)}`;
+      const isRoot = newPath === HOME_PATH;
+      console.log('currentPath ', currentPath);
+      console.log('newRelativePath ', newRelativePath);
 
-      console.log(relativePath);
       let items = await fs.readdir(newPath, {withFileTypes: true});
       items = items.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item.name));
 
       const files = items.map((item,index) => {
         const extension = path.extname(item.name);
         const basename = path.basename(item.name, extension);
-        return {name: item.name, basename, extension, relativePath, isDirectory: item.isDirectory(), file: encodeURI(item.name), path: encodeURI(`${newPath}/${item.name}`)};
+        const isDirectory = item.isDirectory();
+        return {name: item.name, basename, extension, isDirectory, file: encodeURI(item.name), path: encodeURI(`/${isDirectory ? '' : 'public/'}${item.name}`)};
       });
 
-      res.send({files, newPath, status: 'ok'});
+      res.send({files, currentPath, newRelativePath, isRoot: isRoot, status: 'ok'});
     } catch (err) {
       res.send({status: 'err', message: err});
     }
