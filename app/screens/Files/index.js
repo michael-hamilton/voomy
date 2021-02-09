@@ -110,19 +110,11 @@ class Files extends Component {
     clearInterval(this.pollInterval);
   }
 
-  async getDirectory(goUp = false) {
+  async getDirectory(parent=false) {
     this.setState({isFileListLoading: true});
 
-    let query = '';
-    if (!this.state.isRoot && goUp) {
-      query = `&up=true`;
-    }
-
-    console.log(this.state.directory);
-
-    const response = await axios.get(`/public?path=${encodeURI(this.state.directory)}${query}`);
-
-    console.log(response.data);
+    const newPath = parent ? this.state.parentDirectory : this.state.directory;
+    const response = await axios.get(`/public?path=${encodeURI(newPath)}&current=${encodeURI(this.state.directory)}`);
 
     if (response.data.status === 'ok') {
       this.setState({
@@ -132,9 +124,10 @@ class Files extends Component {
         isRoot: response.data.isRoot,
         selectedFileID: this.state.lastSelectedFileID,
         lastSelectedFileID: null,
+        parentDirectory: response.data.parentPath,
         directory: response.data.currentPath
       }, () => {
-        if(goUp) {
+        if(parent) {
           this.clearSearch();
           if (document.querySelector('.filelist')) {
             document.querySelector('.filelist').scrollTo(0, this.state.fileListLastYOffset);
@@ -154,29 +147,6 @@ class Files extends Component {
       });
     }
   }
-
-  // async upDirectory() {
-  //   this.setState({isFileListLoading: true});
-  //
-  //   let query = '';
-  //   if (!this.state.isRoot) {
-  //     query = `?up=true`;
-  //   }
-  //
-  //   const response = await axios.get(`/public/${encodeURI(this.state.directory)}${query}`);
-  //
-  //   this.setState({
-  //     isFileListLoading: false,
-  //     files: response.data.files,
-  //     selectedFileID: this.state.lastSelectedFileID,
-  //     lastSelectedFileID: null,
-  //   }, () => {
-  //     this.clearSearch();
-  //     if (document.querySelector('.filelist')) {
-  //       document.querySelector('.filelist').scrollTo(0, this.state.fileListLastYOffset);
-  //     }
-  //   });
-  // }
 
   handleSearch(e) {
     if (!this.state.fileListLastYOffset) {

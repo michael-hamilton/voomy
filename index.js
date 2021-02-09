@@ -49,13 +49,13 @@ const app = express();
 
   app.get('/public', async (req, res, next) => {
     try {
-      const up = req.query.up ? '..' : '';
       const currentPath = req.query.path || '';
-      const newPath = path.resolve(`${HOME_PATH}/${currentPath}/${up}`);
-      const newRelativePath = `${path.normalize(currentPath, '/', up)}`;
+      const parentPath = req.query.parentPath || '';
+      const newPath = path.resolve(`${HOME_PATH}/${currentPath}`);
+      const newParentPath = path.resolve(`${HOME_PATH}/${parentPath}`);
       const isRoot = newPath === HOME_PATH;
       console.log('currentPath ', currentPath);
-      console.log('newRelativePath ', newRelativePath);
+      console.log('parentPath ', newParentPath);
 
       let items = await fs.readdir(newPath, {withFileTypes: true});
       items = items.filter(item => !(/(^|\/)\.[^\/\.]/g).test(item.name));
@@ -67,7 +67,7 @@ const app = express();
         return {name: item.name, basename, extension, isDirectory, file: encodeURI(item.name), path: encodeURI(`/${isDirectory ? '' : 'public/'}${item.name}`)};
       });
 
-      res.send({files, currentPath, newRelativePath, isRoot: isRoot, status: 'ok'});
+      res.send({files, currentPath, parentPath, isRoot: isRoot, status: 'ok'});
     } catch (err) {
       res.send({status: 'err', message: err});
     }
