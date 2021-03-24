@@ -19,19 +19,19 @@ const renderFileList = (files, selectedID, searchTerm, targetRef, isEditMode, ha
         <ul ref={targetRef} className={`filelist ${isEditMode ? 'edit-mode' : ''}`}>
           {
             filteredFiles.map((file, index) => (
-            <FileListItem
-            key={file.name}
-            index={index}
-            isDirectory={file.isDirectory}
-            file={file.file}
-            name={file.basename}
-            path={file.path}
-            isEditMode={isEditMode}
-            isSelected={selectedID == index}
-            handleClick={handleClick}
-            handleChange={handleChange}
-            handleDelete={handleDelete}
-            />
+              <FileListItem
+                key={file.name}
+                index={index}
+                isDirectory={file.isDirectory}
+                file={file.file}
+                name={file.basename}
+                path={file.path}
+                isEditMode={isEditMode}
+                isSelected={selectedID == index}
+                handleClick={handleClick}
+                handleChange={handleChange}
+                handleDelete={handleDelete}
+              />
             ))
           }
         </ul>
@@ -63,7 +63,7 @@ const FileListItem = (props) => {
     <li
       className={`list-item ${props.isSelected ? 'active' : ''}`}
     >
-      <a data-index={props.index} data-isdirectory={props.isDirectory} href={props.path} onClick={props.handleClick}>
+      <a data-index={props.index} data-isdirectory={props.isDirectory} href={props.isDirectory ? props.path : props.file} onClick={props.handleClick}>
         { props.isEditMode ? <button className={'delete-button'} onClick={props.handleDelete}><BiTrash /></button> : null }
         { props.isEditMode ? <input className={'list-item-edit'} onChange={(e) => setFileName(e.target.value)} onBlur={props.handleChange} data-oldvalue={props.path} value={fileName} />: <span className={'list-item-title'}>{props.name}</span> }
         {
@@ -82,11 +82,11 @@ class Files extends Component {
 
     this.state = {
       directory: '',
+      homePath: '',
       files: [],
       hasFileListLoaded: false,
       isFileListLoading: false,
       isTouchingPlayer: false,
-      isRoot: false,
       searchTerm: '',
       selectedFileID: null,
       lastSelectedFileID: null,
@@ -101,6 +101,7 @@ class Files extends Component {
 
   componentDidMount() {
     this.getDirectory();
+    this.updateHomePath();
 
     this.pollInterval = setInterval(() => this.getDirectory(), 5000);
   }
@@ -110,29 +111,22 @@ class Files extends Component {
     clearInterval(this.pollInterval);
   }
 
-  async getDirectory(parent=false) {
+  async getDirectory() {
     this.setState({isFileListLoading: true});
 
-    const newPath = parent ? this.state.parentDirectory : this.state.directory;
-    const response = await axios.get(`/public?path=${encodeURI(newPath)}&current=${encodeURI(this.state.directory)}`);
+    let query = '';
+    if (this.state.directory) {
+      query = `?path=${encodeURI(this.state.directory)}`;
+    }
+
+    const response = await axios.get(`/directory${query}`);
 
     if (response.data.status === 'ok') {
       this.setState({
         hasFileListLoaded: true,
         isFileListLoading: false,
         files: response.data.files,
-        isRoot: response.data.isRoot,
-        selectedFileID: this.state.lastSelectedFileID,
-        lastSelectedFileID: null,
-        parentDirectory: response.data.parentPath,
-        directory: response.data.currentPath
-      }, () => {
-        if(parent) {
-          this.clearSearch();
-          if (document.querySelector('.filelist')) {
-            document.querySelector('.filelist').scrollTo(0, this.state.fileListLastYOffset);
-          }
-        }
+        directory: response.data.newPath
       });
 
       if (response.data.files && !this.state.isTouchingPlayer) {
@@ -146,6 +140,30 @@ class Files extends Component {
         files: [],
       });
     }
+  }
+
+  async upDirectory() {
+    this.setState({isFileListLoading: true});
+
+    let query = '';
+    if (this.state.directory) {
+      query = `?path=${encodeURI(this.state.directory)}&up=true`;
+    }
+
+    const response = await axios.get(`/directory${query}`);
+
+    this.setState({
+      isFileListLoading: false,
+      files: response.data.files,
+      directory: response.data.newPath,
+      selectedFileID: this.state.lastSelectedFileID,
+      lastSelectedFileID: null,
+    }, () => {
+      this.clearSearch();
+      if (document.querySelector('.filelist')) {
+        document.querySelector('.filelist').scrollTo(0, this.state.fileListLastYOffset);
+      }
+    });
   }
 
   handleSearch(e) {
@@ -180,6 +198,11 @@ class Files extends Component {
 
   playFile(selectedFileID, selectedFileURL) {
     this.setState({selectedFileID, selectedFileURL, lastSelectedFileID: null});
+  }
+
+  async updateHomePath() {
+    const response = await axios.get('/homepath');
+    this.setState({homePath: response.data});
   }
 
   clearSearch(clearOffset = true) {
@@ -260,8 +283,8 @@ class Files extends Component {
                 renderFileList(this.state.files, this.state.selectedFileID, this.state.searchTerm, this.targetElement, this.state.editModeEnabled, this.handleItemSelect.bind(this), this.handleItemRename.bind(this), this.handleItemDelete.bind(this))
             }
             {
-              !this.state.isRoot ?
-                <button className={'up-dir-button'} onClick={() => this.getDirectory(true)}><BiSubdirectoryLeft /></button> :
+              this.state.homePath !== this.state.directory ?
+                <button className={'up-dir-button'} onClick={() => this.upDirectory()}><BiSubdirectoryLeft /></button> :
                 null
             }
           </div>
