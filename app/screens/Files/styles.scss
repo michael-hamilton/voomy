@@ -291,6 +291,8 @@
 
     .filelist {
       .list-item {
+        height: 50px;
+
         a {
           font-size: 14px;
 
@@ -309,8 +311,14 @@
     }
 
     .fileviewer-wrapper {
+      display: flex;
       flex: 3;
       margin: 0;
+
+      div {
+        display: flex;
+        flex: 1;
+      }
     }
   }
 }

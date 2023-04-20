@@ -1,6 +1,6 @@
 {
   "name": "voomy",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "main": "index.js",
   "repository": "https://github.com/michael-hamilton/vidserve.git",
   "author": "Michael Hamilton <michaelhamilton626@gmail.com>",
@@ -25,13 +25,14 @@
   },
   "scripts": {
     "build": "parcel build app/index.html",
-    "dev": "yarn watch & node index.js",
+    "dev": "concurrently \"npm run watch\" \"node index.js\"",
     "start": "pm2 start index.js",
     "watch": "parcel watch app/index.html"
   },
   "devDependencies": {
     "babel-core": "^6.26.3",
     "babel-preset-env": "^1.7.0",
+    "concurrently": "^8.0.1",
     "cssnano": "^4.1.10",
     "parcel-bundler": "^1.12.4",
     "sass": "^1.27.0"
