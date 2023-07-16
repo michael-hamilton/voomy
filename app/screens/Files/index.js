@@ -292,9 +292,16 @@ class Files extends Component {
 
         <div className={'fileviewer-wrapper'}>
           <ReactPlayer
+            controls
+            height={'100%'}
             onTouchEnd={() => this.handlePlayerTouch(false)}
             onTouchStart={() => this.handlePlayerTouch(true)}
-            playing={true} playsinline url={this.state.selectedFileURL} controls height={'100%'} width={'100%'} />
+            playing={true}
+            playsinline
+            style={{ position: 'absolute' }}
+            url={this.state.selectedFileURL}
+            width={'100%'}
+          />
         </div>
       </div>
     );
