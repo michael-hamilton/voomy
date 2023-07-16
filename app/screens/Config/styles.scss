@@ -60,6 +60,30 @@
     margin-bottom: 10px;
     width: 100%;
 
+    .form-header {
+      align-items: center;
+      background-color: #373737;
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      z-index: 1;
+
+      h2 {
+        color: white;
+        display: flex;
+        flex: 2;
+
+        small {
+          align-items: center;
+          display: flex;
+          font-size: 14px;
+          font-weight: 300;
+          justify-content: center;
+          vertical-align: middle;
+        }
+      }
+    }
+
     form {
       display: flex;
       width: 100%;

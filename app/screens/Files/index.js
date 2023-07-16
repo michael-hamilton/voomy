@@ -64,8 +64,8 @@ const FileListItem = (props) => {
       className={`list-item ${props.isSelected ? 'active' : ''}`}
     >
       <a data-index={props.index} data-isdirectory={props.isDirectory} href={props.isDirectory ? props.path : props.file} onClick={props.handleClick}>
-        { props.isEditMode ? <button className={'delete-button'} onClick={props.handleDelete}><BiTrash /></button> : null }
-        { props.isEditMode ? <input className={'list-item-edit'} onChange={(e) => setFileName(e.target.value)} onBlur={props.handleChange} data-oldvalue={props.path} value={fileName} />: <span className={'list-item-title'}>{props.name}</span> }
+        { props.isEditMode ? <button className={`delete-button ${props.isSelected ? 'disabled' : ''}`} onClick={props.handleDelete} disabled={props.isSelected}><BiTrash /></button> : null }
+        { props.isEditMode ? <input className={'list-item-edit'} onChange={(e) => setFileName(e.target.value)} onBlur={props.handleChange} data-oldvalue={props.path} value={fileName} disabled={props.isSelected} />: <span className={'list-item-title'}>{props.name}</span> }
         {
           props.isDirectory ?
             <BiFolder className={'directoryIcon'} /> :

@@ -148,6 +148,12 @@ class Config extends Component {
     return (
       <div className={'config-container'}>
         <div className={'form-wrapper'}>
+          <div className={'form-header'}>
+            <h2>
+              pin code
+            </h2>
+          </div>
+
           <form
             className={'form'}
             onSubmit={(e) => this.confirmSavePin(e)}
@@ -166,6 +172,12 @@ class Config extends Component {
         </div>
 
         <div className={'form-wrapper'}>
+          <div className={'form-header'}>
+            <h2>
+              home directory
+            </h2>
+          </div>
+
           <form
             className={'form'}
             onSubmit={(e) => this.confirmSavehomePath(e)}

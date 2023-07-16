@@ -161,7 +161,6 @@
     width: 100%;
 
     .list-item {
-      transition: 0.25s;
 
       a {
         align-items: center;
@@ -170,7 +169,6 @@
         font-size: 12px;
         height: 100%;
         padding: 0 30px 0 0;
-        transition: 0.125s;
         text-decoration: none;
         user-select: none;
         width: 100%;
@@ -196,12 +194,16 @@
           justify-content: center;
           margin-right: 5px;
           outline: none;
-          padding: 10px 10px 9px 10px;
+          padding: 9px 10px 9px 10px;
           -webkit-user-select: none;
 
-          &:hover {
+          &:hover:not(&.disabled) {
             background-color: tomato;
             color: white;
+          }
+
+          &.disabled {
+            color: rgba(0, 0, 0, 0.5);
           }
         }
 
@@ -256,7 +258,8 @@
     &.edit-mode {
       .list-item {
         a {
-          padding-bottom: 1px;
+          padding: 2px 0;
+
           .list-item-title {
             padding: 28px 0;
           }

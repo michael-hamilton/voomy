@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import axios from "axios";
-import {version} from "../../../package.json";
+import { version } from "../../../package.json";
 import './styles.scss';
 
 class Login extends Component {
